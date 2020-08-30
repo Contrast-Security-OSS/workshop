@@ -1,0 +1,1 @@
+docker run -e CONTRAST__URL=https://eval.contrastsecurity.com/Contrast -e CONTRAST__API__API_KEY={api_key} -e CONTRAST__API__SERVICE_KEY={service_key} -e CONTRAST__API__USER_NAME={username} -p 8080:8080 workshop/contrast-demo-java-webgoat:2.0

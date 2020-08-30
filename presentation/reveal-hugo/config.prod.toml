@@ -1,0 +1,29 @@
+baseURL = "https://contrast-security-oss.github.io/workshop-hugo/"
+languageCode = "en-us"
+title = "Constrast Security User Workshop"
+theme = "reveal-hugo"
+
+publishDir = "public"
+
+[markup.goldmark.renderer]
+unsafe = true
+
+[outputFormats.Reveal]
+baseName = "index"
+mediaType = "text/html"
+isHTML = true
+
+[params.reveal_hugo]
+theme = "contrast"
+progress = true
+slide_number = true
+hash = true
+keyboard = true
+overview = true
+mouse_wheel = true
+width = "100%"
+height = "100%"
+min_scale = 1
+max_scale = 1
+margin = 0.1
+center = true

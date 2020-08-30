@@ -1,0 +1,43 @@
+---
+  driver:
+    name: azurerm
+    subscription_id: <%= ENV['AZURE_SUBSCRIPTION_ID'] %>
+    location: 'West US'
+    machine_size: 'Standard_DS2_v2' # 2 vCPU, 7GB Memory, 14GB SSD
+    # machine_size: 'Standard_D2_v3' # 2 vCPU, 8GB Memory, 50GB SSD
+    # machine_size: 'Standard_DS3_v2' # 4 vCPU, 14GB Memory, 28GB SSD
+  
+  provisioner:
+    name: chef_zero
+    # You may wish to disable always updating cookbooks in CI or other testing environments.
+    # For example:
+    #   always_update_cookbooks: <%= !ENV['CI'] %>
+    always_update_cookbooks: true
+    client_rb:
+      chef_license: accept
+  
+  verifier:
+    name: inspec
+  
+  platforms:
+    - name: win2019-with-containers
+      driver:
+        vm_name: workshop-vm
+        vm_tags:
+          owner: "Brian Chau"
+          demo: "true"
+        image_urn: MicrosoftWindowsServer:WindowsServer:2019-Datacenter-with-Containers:latest
+        username: azure
+        password: Cod3Can!
+      transport:
+        name: winrm
+        elevated: true
+  
+  suites:
+    - name: default
+      run_list:
+        - recipe[contrast-windows-demo-workstation::base]
+      verifier:
+        inspec_tests:
+          - test/integration/default
+      attributes:

@@ -1,0 +1,120 @@
+{
+	"builders": [{
+			"type": "azure-arm",
+		
+			"client_id": "{{user `azure_client_id`}}",
+			"client_secret": "{{user `azure_client_secret`}}",
+			"subscription_id": "{{user `azure_subscription_id`}}",
+			"tenant_id": "{{user `azure_tenant_id`}}",
+
+			"managed_image_resource_group_name": "{{ user `template_resource_group` }}",
+			"managed_image_name": "{{ user `template` }}",
+		
+			"os_type": "Windows",
+			"image_publisher": "MicrosoftWindowsServer",
+			"image_offer": "WindowsServer",
+			"image_sku": "2019-Datacenter-with-Containers",
+		
+			"azure_tags": {
+			  "dept": "{{ user `department` }}",
+			  "task": "Image deployment",
+			  "version": "08-27-2020"
+			},
+		
+			"location": "{{ user `azure_location` }}",
+			"vm_size": "{{ user `azure_vm_size` }}",
+
+			"communicator": "winrm",
+            "winrm_use_ssl": "true",
+			"winrm_insecure": "true",
+			"winrm_timeout": "12h",
+			"winrm_username": "{{ user `username` }}",
+			"winrm_password": "{{ user `password` }}"
+		}
+	],
+	"provisioners": [{
+			"type": "chef-solo",
+			"cookbook_paths": ["cookbooks"],
+			"guest_os_type": "windows",
+			"execute_command": "chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}",
+			"run_list": [
+				"packer::disable_uac",
+				"packer::disable_restore",
+				"packer::disable_windows_update",
+				"packer::remove_defender"
+			]
+		},
+		{
+			"type": "windows-restart"
+		},
+		{
+			"type": "chef-solo",
+			"cookbook_paths": ["cookbooks"],
+			"guest_os_type": "windows",
+			"execute_command": "chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}",
+			"run_list": [
+				"packer::features",
+				"packer::enable_file_sharing",
+				"packer::enable_remote_desktop",
+				"packer::ui_tweaks",
+				"packer::power"
+			]
+		},
+		{
+			"type": "windows-restart"
+		},
+		{
+			"type": "chef-solo",
+			"cookbook_paths": ["cookbooks"],
+			"guest_os_type": "windows",
+			"execute_command": "chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}",
+			"run_list": [
+				"contrast-windows-demo-workstation::base",
+				"contrast-windows-demo-workstation::visualstudio",
+                "contrast-windows-demo-workstation::msteams"
+			]
+		},
+		{
+			"type": "windows-restart"
+		},
+		{
+			"type": "chef-solo",
+			"cookbook_paths": ["cookbooks"],
+			"guest_os_type": "windows",
+			"execute_command": "chef-solo --chef-license accept-silent --no-color -c {{.ConfigPath}} -j {{.JsonPath}}",
+			"run_list": [
+				"packer::cleanup"
+			]
+		},
+		{
+			"type": "powershell",
+			"script": "scripts/cleanup.ps1"
+        },
+        {
+            "type": "powershell",
+            "inline": [
+				"if( Test-Path $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml ){ rm $Env:SystemRoot\\windows\\system32\\Sysprep\\unattend.xml -Force}",
+				"& $env:SystemRoot\\System32\\Sysprep\\Sysprep.exe /oobe /generalize /quiet /quit",
+				"while($true) { $imageState = Get-ItemProperty HKLM:\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Setup\\State | Select ImageState; if($imageState.ImageState -ne 'IMAGE_STATE_GENERALIZE_RESEAL_TO_OOBE') { Write-Output $imageState.ImageState; Start-Sleep -s 10  } else { break } }"
+            ],
+            "only": ["azure-arm"]
+		}
+	],
+	"variables": {
+		"template_resource_group": "sales-engineering",
+		"department": "Sales Engineering",
+		"username": "contrast",
+		"password": "{{env `AZ_DO_PASSWORD`}}",
+		"azure_location": "East US",
+		"azure_vm_size": "Standard_D2_v3",
+		"guest_additions_mode": "attach",
+		"headless": "true",
+		"template": "workshop-containers-2019",
+		"aws_access_key": "{{env `AWS_ACCESS_KEY_ID`}}",
+		"aws_secret_key": "{{env `AWS_SECRET_ACCESS_KEY`}}",
+		"azure_client_id": "{{env `AZURE_CLIENT_ID`}}",
+		"azure_client_secret": "{{env `AZURE_CLIENT_SECRET`}}",
+		"azure_subscription_id": "{{env `AZURE_SUBSCRIPTION_ID`}}",
+		"azure_tenant_id": "{{env `AZURE_TENANT_ID`}}"
+	}
+}

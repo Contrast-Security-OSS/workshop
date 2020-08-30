@@ -1,0 +1,78 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-nodejs-juice-shop
+  name: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-nodejs-juice-shop
+spec:
+  selector:
+    matchLabels:
+      app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-nodejs-juice-shop
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-nodejs-juice-shop
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      restartPolicy: Always
+      containers:
+        - name: nodejs-juice-shop
+          image: salesengineering.azurecr.io/juice-shop:1
+          ports:
+            - containerPort: 3000
+          env:
+            - name: API__API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__key
+            - name: API__SERVICE_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__service_key
+            - name: API__URL
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__url
+            - name: API__USER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__user_name
+            - name: CONTRAST__API__SERVICE_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__service_key
+            - name: APPLICATION__NAME
+              value: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-juice-shop-01
+            - name: APPLICATION__TAGS
+              value: nodejs,<<CONTRAST__DEMO__CUSTOMER>>
+            - name: SERVER__ENVIRONMENT
+              value: DEV
+            - name: SERVER__NAME
+              value: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-nodejs-server
+            - name: SERVER__TAGS
+              value: nodejs,<<CONTRAST__DEMO__CUSTOMER>>
+      imagePullSecrets:
+        - name: mamacrsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-nodejs-juice-shop-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-nodejs-juice-shop
+  ports:
+    - name: "<<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-nodejs-juice-shop"
+      port: 18103
+      targetPort: 3000

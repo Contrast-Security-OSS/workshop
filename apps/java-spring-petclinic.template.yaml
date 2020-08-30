@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-spring-petclinic
+  name: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-spring-petclinic
+spec:
+  selector:
+    matchLabels:
+      app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-spring-petclinic
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-spring-petclinic
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      restartPolicy: Always
+      containers:
+        - name: java-spring-petclinic
+          image: salesengineering.azurecr.io/spring-petclinic:1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: -javaagent:/opt/contrast/contrast.jar
+                -Dcontrast.api.url=<<CONTRAST__API__URL>>
+                -Dcontrast.api.api_key=<<CONTRAST__API__KEY>>
+                -Dcontrast.api.service_key=<<CONTRAST__API__SERVICE_KEY>>
+                -Dcontrast.api.user_name=<<CONTRAST__API__USER_NAME>>
+                -Dcontrast.standalone.appname=<<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-spring-petclinic
+                -Dcontrast.server.name=<<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-spring-server
+                -Dcontrast.server.environment=dev
+                -Dcontrast.application.tags=spring,<<CONTRAST__DEMO__CUSTOMER>>
+                -Dcontrast.server.tags=spring,<<CONTRAST__DEMO__CUSTOMER>>
+      imagePullSecrets:
+        # TODO: The next field is the name of the secrets that contain your AZ credentials.
+        - name: mamacrsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-spring-petclinic-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-spring-petclinic
+  ports:
+    - name: "<<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-spring-petclinic"
+      port: 18102
+      targetPort: 8080

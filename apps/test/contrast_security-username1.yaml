@@ -1,0 +1,8 @@
+api:
+  url: http://URL-for-user1:1111
+  api_key: API_KEY_INVALID_STUB1
+  service_key: SERVICE_KEY_INVALID_STUB1
+  user_name: USERNAME_INVALID_STUB1
+agent:
+  logger:
+    level: ALL

@@ -1,0 +1,55 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-webgoat
+  name: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-webgoat
+spec:
+  selector:
+    matchLabels:
+      app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-webgoat
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-webgoat
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      restartPolicy: Always
+      containers:
+        - name: java-webgoat
+          image: salesengineering.azurecr.io/cs-demo-webgoat:70
+          ports:
+            - containerPort: 8080
+          env:
+            - name: JAVA_TOOL_OPTIONS
+              value: -javaagent:/opt/contrast/contrast.jar
+                -Dcontrast.api.url=<<CONTRAST__API__URL>>
+                -Dcontrast.api.api_key=<<CONTRAST__API__KEY>>
+                -Dcontrast.api.service_key=<<CONTRAST__API__SERVICE_KEY>>
+                -Dcontrast.api.user_name=<<CONTRAST__API__USER_NAME>>
+                -Dcontrast.standalone.appname=<<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-webgoat
+                -Dcontrast.server.name=<<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-webgoat
+                -Dcontrast.server.environment=dev
+                -Dcontrast.application.tags=spring,<<CONTRAST__DEMO__CUSTOMER>>
+                -Dcontrast.server.tags=spring,<<CONTRAST__DEMO__CUSTOMER>>
+      imagePullSecrets:
+        # TODO: The next field is the name of the secrets that contain your AZ credentials.
+        - name: mamacrsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-webgoat-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-webgoat
+  ports:
+    - name: "<<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-java-webgoat"
+      port: 18101
+      targetPort: 8080

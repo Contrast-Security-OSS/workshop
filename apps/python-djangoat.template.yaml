@@ -1,0 +1,74 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-python-djangoat
+  name: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-python-djangoat
+spec:
+  selector:
+    matchLabels:
+      app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-python-djangoat
+  replicas: 1
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-python-djangoat
+    spec:
+      nodeSelector:
+        "beta.kubernetes.io/os": linux
+      restartPolicy: Always
+      containers:
+        - name: python-djangoat
+          image: salesengineering.azurecr.io/djangoat
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8000
+          env:
+            - name: CONTRAST__API__API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__key
+            - name: CONTRAST__API__SERVICE_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__service_key
+            - name: CONTRAST__API__URL
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__url
+            - name: CONTRAST__API__USER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+                  key: contrast__api__user_name
+            - name: CONTRAST__APPLICATION__NAME
+              value: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-djangoat-01
+            - name: CONTRAST__APPLICATION__TAGS
+              value: python,<<CONTRAST__DEMO__CUSTOMER>>
+            - name: CONTRAST__SERVER__ENVIRONMENT
+              value: dev
+            - name: CONTRAST__SERVER__NAME
+              value: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-djangoat-server
+            - name: CONTRAST__SERVER__TAGS
+              value: python,<<CONTRAST__DEMO__INITIALS>>
+      imagePullSecrets:
+        - name: mamacrsecret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-python-djangoat-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: <<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-python-djangoat
+  ports:
+    - name: "<<CONTRAST__DEMO__CUSTOMER>><<CONTRAST__DEMO__INITIALS>>-python-djangoat"
+      port: 18104
+      targetPort: 8000

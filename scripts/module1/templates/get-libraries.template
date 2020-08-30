@@ -1,0 +1,1 @@
+curl -X GET https://eval.contrastsecurity.com/Contrast/api/ng/{org_uuid}/libraries -H "Authorization:{authorization_key}" -H "API-Key:{api_key}"

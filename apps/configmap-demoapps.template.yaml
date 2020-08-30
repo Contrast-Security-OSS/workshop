@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: <<CONTRAST__DEMO__CUSTOMER>>-<<CONTRAST__DEMO__INITIALS>>-config-map
+data:
+  contrast__api__key: "<<CONTRAST__API__KEY>>"
+  contrast__api__service_key: "<<CONTRAST__API__SERVICE_KEY>>"
+  contrast__api__url: "<<CONTRAST__API__URL>>"
+  contrast__api__user_name: "<<CONTRAST__API__USER_NAME>>"
+  contrast__demo__initials: "<<CONTRAST__DEMO__INITIALS>>"
+  contrast__demo__customer: "<<CONTRAST__DEMO__CUSTOMER>>"

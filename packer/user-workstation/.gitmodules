@@ -1,0 +1,3 @@
+[submodule "cookbooks/contrast-windows-demo-workstation"]
+	path = cookbooks/contrast-windows-demo-workstation
+	url = https://bitbucket.org/contrastsecurity/contrast-windows-demo-workstation.git

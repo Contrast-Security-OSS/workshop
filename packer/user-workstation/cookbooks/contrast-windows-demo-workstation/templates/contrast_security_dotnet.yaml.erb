@@ -1,0 +1,17 @@
+api: 
+  url: <%= node['contrast-windows-demo-workstation']['teamserver_url'] %>
+  api_key: <%= node['contrast-windows-demo-workstation']['api_key'] %>
+  service_key: <%= node['contrast-windows-demo-workstation']['service_key'] %>
+  user_name: <%= node['contrast-windows-demo-workstation']['user_name'] %>
+
+application:
+  tags: Demo
+
+agent:
+  dotnet:
+    app_pool_whitelist: WebGoat
+    enable_chaining: true
+
+server:
+  name: VAGRANT-dotnet-dev
+  environment: development

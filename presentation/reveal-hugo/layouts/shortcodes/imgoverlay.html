@@ -1,0 +1,46 @@
+{{ $original := .Page.Resources.GetMatch (printf "*%s*" (.Get 0)) }}
+{{ $command := .Get 1 }}
+{{ $options := .Get 2 }}
+{{ if eq $command "Fit"}}
+{{ .Scratch.Set "image" ($original.Fit $options) }}
+{{ else if eq $command "Resize"}}
+{{ .Scratch.Set "image" ($original.Resize $options) }}
+{{ else if eq $command "Fill"}}
+{{ .Scratch.Set "image" ($original.Fill $options) }}
+{{ else }}
+{{ errorf "Invalid image processing command: Must be one of Fit, Fill or Resize."}}
+{{ end }}
+{{ $image := .Scratch.Get "image" }}
+<!-- Trigger the Modal -->
+<img id="{{.Get 0}}" style="max-width: 100%; width: auto; height: auto;" src="{{ $image.RelPermalink }}"
+     width="{{ $image.Width }}" height="{{ $image.Height }}" alt="{{ $original.Title }}" >
+
+<!-- The Modal -->
+<div id="myModal-{{.Get 0}}" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content" id="img-{{.Get 0}}">
+    <div id="caption"></div>
+</div>
+
+<script type="text/javascript">
+// Get the modal
+var modal = document.getElementById("myModal-{{.Get 0}}");
+
+// Get the image and insert it inside the modal - use its "alt" text as a caption
+var img = document.getElementById("{{.Get 0}}");
+var modalImg = document.getElementById("img-{{.Get 0}}");
+var captionText = document.getElementById("caption");
+img.onclick = function(){
+  modal.style.display = "block";
+  modalImg.src = {{ $original.RelPermalink }};
+  captionText.innerHTML = this.alt;
+}
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+</script>
