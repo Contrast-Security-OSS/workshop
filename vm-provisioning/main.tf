@@ -2,8 +2,16 @@ provider "azurerm" {
   version = "~>2.0"
   features {}
 }
+// The following commented-out code causes a terraform 0.13.1 crash.  I haven't investigated, but it looks like when we
+// specify the image with a reference to a resource group name, we get an error.  This is a fairly explicit reference,
+// that doesn't seem to work.  The workaround is to cite the image by ID.
 
-resource "azurerm_resource_group" "myterraformgroup" {
+//data "azurerm_image" "image" {
+//  name = "medtronic-workshop-containers-2019-mm"
+//  resource_group_name = "sales-engineering"
+//}
+
+resource "azurerm_resource_group" "workshopgroup" {
   name     = "${var.prefix}-resources"
   location = var.location
   tags = {
@@ -13,28 +21,28 @@ resource "azurerm_resource_group" "myterraformgroup" {
   }
 }
 
-resource "azurerm_virtual_network" "myterraformnetwork" {
+resource "azurerm_virtual_network" "workshopnetwork" {
   name                = "myVnet"
   address_space       = ["10.0.0.0/16"]
-  location            = "eastus"
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  location            = var.location
+  resource_group_name = azurerm_resource_group.workshopgroup.name
 
   tags = {
     environment = "Terraform Demo"
   }
 }
 
-resource "azurerm_subnet" "myterraformsubnet" {
+resource "azurerm_subnet" "workshopsubnet" {
   name                 = "mySubnet"
-  resource_group_name  = azurerm_resource_group.myterraformgroup.name
-  virtual_network_name = azurerm_virtual_network.myterraformnetwork.name
+  resource_group_name  = azurerm_resource_group.workshopgroup.name
+  virtual_network_name = azurerm_virtual_network.workshopnetwork.name
   address_prefixes       = ["10.0.2.0/24"]
 }
 
-resource "azurerm_public_ip" "myterraformpublicip" {
+resource "azurerm_public_ip" "workshoppublicip" {
   name                         = "myPublicIP"
   location                     = "eastus"
-  resource_group_name          = azurerm_resource_group.myterraformgroup.name
+  resource_group_name          = azurerm_resource_group.workshopgroup.name
   allocation_method            = "Dynamic"
 
   tags = {
@@ -42,19 +50,19 @@ resource "azurerm_public_ip" "myterraformpublicip" {
   }
 }
 
-resource "azurerm_network_security_group" "myterraformnsg" {
+resource "azurerm_network_security_group" "workshopnsg" {
   name                = "myNetworkSecurityGroup"
   location            = "eastus"
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  resource_group_name = azurerm_resource_group.workshopgroup.name
 
   security_rule {
-    name                       = "SSH"
+    name                       = "RDP"
     priority                   = 1001
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "22"
+    destination_port_range     = "3389"
     source_address_prefix      = "*"
     destination_address_prefix = "*"
   }
@@ -64,16 +72,16 @@ resource "azurerm_network_security_group" "myterraformnsg" {
   }
 }
 
-resource "azurerm_network_interface" "myterraformnic" {
+resource "azurerm_network_interface" "workshopnic" {
   name                        = "myNIC"
   location                    = "eastus"
-  resource_group_name         = azurerm_resource_group.myterraformgroup.name
+  resource_group_name         = azurerm_resource_group.workshopgroup.name
 
   ip_configuration {
     name                          = "myNicConfiguration"
-    subnet_id                     = azurerm_subnet.myterraformsubnet.id
+    subnet_id                     = azurerm_subnet.workshopsubnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.myterraformpublicip.id
+    public_ip_address_id          = azurerm_public_ip.workshoppublicip.id
   }
 
   tags = {
@@ -83,43 +91,30 @@ resource "azurerm_network_interface" "myterraformnic" {
 
 # Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "example" {
-  network_interface_id      = azurerm_network_interface.myterraformnic.id
-  network_security_group_id = azurerm_network_security_group.myterraformnsg.id
-}
-
-resource "random_id" "randomId" {
-  keepers = {
-    # Generate a new ID only when a new resource group is defined
-    resource_group = azurerm_resource_group.myterraformgroup.name
-  }
-
-  byte_length = 8
-}
-
-resource "azurerm_storage_account" "mystorageaccount" {
-  name                        = "diag${random_id.randomId.hex}"
-  resource_group_name         = azurerm_resource_group.myterraformgroup.name
-  location                    = "eastus"
-  account_replication_type    = "LRS"
-  account_tier                = "Standard"
-
-  tags = {
-    environment = "Terraform Demo"
-  }
+  network_interface_id      = azurerm_network_interface.workshopnic.id
+  network_security_group_id = azurerm_network_security_group.workshopnsg.id
 }
 
 resource "azurerm_virtual_machine" "vm" {
   name                  = var.hostname
   location              = var.location
-  resource_group_name   = azurerm_resource_group.myterraformgroup.name
+  resource_group_name   = azurerm_resource_group.workshopgroup.name
   vm_size               = var.vm_size
-  network_interface_ids = ["${azurerm_network_interface.myterraformnic.id}"]
+  network_interface_ids = ["${azurerm_network_interface.workshopnic.id}"]
+
+  storage_image_reference {
+    // Reference the image by ID directly
+//    id = data.azurerm_image.image.id
+    id = ""
+  }
+
 
   storage_os_disk {
     name          = "${var.hostname}-osdisk1"
-    vhd_uri = ""
-    create_option = "Attach"
-    os_type = "Windows"
+    caching = "ReadWRite"
+    create_option = "FromImage"
+    managed_disk_type = "Premium_LRS"
+//    os_type = "Windows"
   }
 
   os_profile_windows_config {
@@ -132,5 +127,4 @@ resource "azurerm_virtual_machine" "vm" {
     admin_username = var.admin_username
     admin_password = var.admin_password
   }
-
 }
