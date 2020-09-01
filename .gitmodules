@@ -1,0 +1,4 @@
+[submodule "presentation/reveal-hugo/public"]
+	path = presentation/reveal-hugo/public
+	url = https://github.com/Contrast-Security-OSS/workshop-hugo
+	branch = master
