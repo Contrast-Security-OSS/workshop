@@ -123,11 +123,11 @@ do
   "first_name":"$first",
   "groups":[39],
   "last_name":"$last",
-  "org_management":true,
+  "org_management":false,
   "organization_uuid":"$ORG_UUID",
   "password":"$DEFAULT_PASSWORD",
   "protect":true,
-  "role":2,
+  "role":3,
   "time_format":"hh:mm a",
   "time_zone":"EST",
   "username":"$email"
