@@ -226,22 +226,23 @@ cat <<STARTUP > $CONTRAST__DEMO__CUSTOMER/startup-$username.sh
 date --utc +%FT%TZ
 kubectl apply -f $username/configmap-demoapps.yaml
 #kubectl apply -f $username/java-webgoat.yaml -f $username/java-spring-petclinic.yaml -f $username/nodejs-juice-shop.yaml -f $username/python-djangoat.yaml
-kubectl apply -f $username/java-webgoat.yaml -f $username/java-spring-petclinic.yaml
+#kubectl apply -f $username/java-webgoat.yaml -f $username/java-spring-petclinic.yaml
+kubectl apply -f $username/java-webgoat.yaml
 STARTUP
 
 cat <<WAITONSERVICE > $CONTRAST__DEMO__CUSTOMER/waitonservice-$username.sh
 #!/bin/bash
 
-date --utc +%FT%TZ
-external_ip=""
-while [ -z \$external_ip ]; do
-  echo "Waiting for end point $CONTRAST__DEMO__CUSTOMER$CONTRAST__DEMO__INITIALS-java-spring-petclinic-svc"
-  external_ip=\$(kubectl get svc $CONTRAST__DEMO__CUSTOMER$CONTRAST__DEMO__INITIALS-java-spring-petclinic-svc --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}")
-  [ -z "\$external_ip" ] && sleep 10
-done
-
-port=\$(kubectl get service $CONTRAST__DEMO__CUSTOMER$CONTRAST__DEMO__INITIALS-java-spring-petclinic-svc --template="{{range.spec.ports}}{{if .port}}{{.port}}{{end}}{{end}}")
-echo "$CONTRAST__DEMO__CUSTOMER$CONTRAST__DEMO__INITIALS-java-spring-petclinic-svc End point ready- http://\$external_ip:\$port"
+#date --utc +%FT%TZ
+#external_ip=""
+#while [ -z \$external_ip ]; do
+#  echo "Waiting for end point $CONTRAST__DEMO__CUSTOMER$CONTRAST__DEMO__INITIALS-java-spring-petclinic-svc"
+#  external_ip=\$(kubectl get svc $CONTRAST__DEMO__CUSTOMER$CONTRAST__DEMO__INITIALS-java-spring-petclinic-svc --template="{{range .status.loadBalancer.ingress}}{{.ip}}{{end}}")
+#  [ -z "\$external_ip" ] && sleep 10
+#done
+#
+#port=\$(kubectl get service $CONTRAST__DEMO__CUSTOMER$CONTRAST__DEMO__INITIALS-java-spring-petclinic-svc --template="{{range.spec.ports}}{{if .port}}{{.port}}{{end}}{{end}}")
+#echo "$CONTRAST__DEMO__CUSTOMER$CONTRAST__DEMO__INITIALS-java-spring-petclinic-svc End point ready- http://\$external_ip:\$port"
 
 date --utc +%FT%TZ
 external_ip=""
@@ -260,7 +261,8 @@ cat <<SHUTDOWN > $CONTRAST__DEMO__CUSTOMER/shutdown-$username.sh
 
 date --utc +%FT%TZ
 #kubectl delete -f $username/java-webgoat.yaml -f $username/java-spring-petclinic.yaml -f $username/nodejs-juice-shop.yaml -f $username/python-djangoat.yaml -f $username/configmap-demoapps.yaml
-kubectl delete -f $username/java-webgoat.yaml -f $username/java-spring-petclinic.yaml -f $username/configmap-demoapps.yaml
+#kubectl delete -f $username/java-webgoat.yaml -f $username/java-spring-petclinic.yaml -f $username/configmap-demoapps.yaml
+kubectl delete -f $username/java-webgoat.yaml -f $username/configmap-demoapps.yaml
 SHUTDOWN
 
 chmod +x $CONTRAST__DEMO__CUSTOMER/startup-$username.sh
