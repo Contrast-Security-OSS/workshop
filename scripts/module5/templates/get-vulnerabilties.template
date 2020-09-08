@@ -1,0 +1,2 @@
+curl -X GET https://eval.contrastsecurity.com/Contrast/api/ng/{org_uuid}/traces/{app_id}/quick -H "Authorization:{authorization_key}" -H "API-Key:{api_key}"
+curl -X GET https://eval.contrastsecurity.com/Contrast/api/ng/{org_uuid}/traces/{app_id}/ids -H "Authorization:{authorization_key}" -H "API-Key:{api_key}"

@@ -40,6 +40,7 @@ Jump to:
 - [Module Introduction](#/module-introduction)
 - [The WebGoat application](#/the-webgoat-application)
 - [The Contrast API](#/the-contrast-api)
+- [LAB: You API credentials](#/your-api-credentials)
 - [Next Steps](#/next-steps)
 
 ---
@@ -47,6 +48,8 @@ Jump to:
 ## Module Introduction
 
 In this section we'll guide you through a sequence of steps to exercise the Contrast Security REST APIs with pre-configured applications.
+
+This module is useful for members that wish to gain better understanding of how to automate with the Contrast API.
 
 ---
 ### Objectives
@@ -82,86 +85,44 @@ This workshop is designed to have you deploy an application so you can see its d
 Your instructor already deployed applications configured with your TeamServer credentials.  You will receive the connection details for your applications as a URLs for each vulnerable application.
 
 ---
+{{< slide id="the-contrast-api" >}}
+## The Contrast API
+
+The TeamServer User Interface is designed to help users find and see information quickly and easily.  
+
+TeamServer utilizes the API on the backend, and Contrast Security has made this API available to external users.
+
+Contrast Security also provides programmatic access for teams that wish to integrate with their existing systems.
+
+You can also reference the Contrast Security [API documentation](https://api.contrastsecurity.com).
+ 
+---
+### API Overview
+
+We will show you how to programmatically access information via API and compare the results with the User Interface to show consistency.
+
+To programmatically use the API, you will need specific details to make them work.
+
+Real world teams will see familiar patterns and techniques in the Contrast API if they have used others.  Teams have taken great liberty using their favorite programming or scripting languages to automate against our API in their preferred toolchain.
+
+---
 {{% note %}}
 The dashboard is a landing page for all Contrast Security users - developers, operations, security, and administrators.  The different dashboard pages provide an overview for your team to quickly assess the status of the application security.  
 {{% /note %}}
 
 ### Log on to TeamServer
-Start by logging onto the Contrast Security UI at https://eval.contrastsecurity.com with the username and password your instructor supplied to you.
+Log onto the Contrast Security UI at https://eval.contrastsecurity.com with the username and password your instructor supplied to you.
 
-We'll use the default landing page's dashboard as the starting point for this module's exercise.
-
-Your instructor will provide an overview of the TeamServer.  
+Next, we'll find your API details.
 
 {{< figure src="../images/04-dashboard.png#center" height="400px" text-align="center">}}
 [See the full-sized picture](../images/04-dashboard.png)
 
----
-{{< slide id="the-contrast-API" >}}
-{{% note %}}
-In this slide, we should have already setup each user with their running applications so data has been sent to TeamServer.
+--- 
+{{< slide id="your-api-credentials" >}}
+### API credentials
 
-The time saved by automatically onboarding and offboarding applications is substantial.  No more complex rules, setup, or configuration.
-{{% /note %}}
-
-## The Contrast API
-
-Next, let's look at how your teams can leverage the Contrast API.
-
-The TeamServer User Interface is designed to help users find and see information quickly and easily.  The TeamServer utilizes an API on the backend, and Contrast Security has made this API available to external users.
-
-Contrast Security provides a number of out-of-the-box integrations for Jira, Jenkins, Slack, and other popular tools to provide fast feedback.  Contrast Security also provides programmatic access for teams that wish to integrate with their existing systems.
-
-You can also reference the Contrast Security [API documentation] (https://api.contrastsecurity.com).
- 
----
-### API Overview
-
-In this section, we'll show you how to programmatically access the same information via API.  We'll compare some of the results from the User Interface and the CLI to show consistency.
-
-To programmatically use the API, you will need specific details to make them work.  We'll guide you in the next tasks with those details.
-
-Real world teams will see familiar patterns and techniques in the Contrast API if they have used others.  Teams have taken great liberty using their favorite programming or scripting languages to automate against our API in their preferred toolchain.
-
-The examples here will illustrate the basics.
-
----
-### Source code: scripts
-
-At Contrast Security, we've published our workshop files to GitHub so you can access the content there.  Let's start by getting the code for this project so you can run some script.  We'll assume you are always working from the same base directory as shown by the %HOMEPATH% reference below.
- 
-From your workstation, open a command prompt and run the following command:
-
-```text
-cd %HOMEPATH%
-git clone https://github.com/Contrast-Security-OSS/workshop
-cd workshop
-```
-
-The command-line commands you will run will be from the checked out folder, named `workshop.`
-
----
-### Your Application ID
-
-The first piece of information we'll get is the unique Application ID for your running instance of WebGoat.  Every application has a unique identifier, and we'll find ours in the URL when we're on a page that shows your WebGoat application:
- 
-`https://eval.contrastsecurity.com/Contrast/static/ng/index.html#/c992a0ef-e965-4f92-a410-e09256a78758/applications/2ac60539-9d58-4365-a006-dc0fc51efc7e`
-
-The two embedded IDs are identified as follows:
-
-- `c992a0ef-e965-4f92-a410-e09256a78758`
-
-The first value is your organization UUID, or `{org_uuid}`.  Your `{org_uuid}` is where you collect the details of your various applications specific to your organization.  We created one organization for the group in this workshop.
-
-- `2ac60539-9d58-4365-a006-dc0fc51efc7e`
- The second value is your application ID, or`{app_id}`.  Your `{app_id}` is specific to your running instance of your application.
-
-Make note of the `app_id` because we'll need this later.
-
----
-### User API details
-
-In TeamServer, Click on your name in the upper-right hand corner and then select "Oragnization Settings" to find your API details.
+In TeamServer, Click on your name in the upper-right hand corner and then select "Organization Settings" to find your API details.
 
 {{< figure src="16-user-details.png">}}
 
@@ -169,68 +130,118 @@ Next, click on the API heading on the left to get those details
 {{< figure src="16-user-details-api.png"   height="300px"
 caption="[See the full-sized picture](16-user-details-api.png)" >}}
 
-Let's look at the content of that page.
+Let's look at the content of that page to find the first piece of information.
 
 ---
 ### REST API Details
 
-The REST API page has the details you need to complete programmatic access to the server.  This is the entire list of information:
+The REST API page has the details you need to complete programmatic access to the server.  On this page, we'll focus on two pieces of information:
 - `{org_uuid}`
 - `{api_key}`
-- `{url}`
-- `{user_name}`
-- `{service_key}`
 
 {{< figure src="16-user-details-api-rest.png" height="300px" 
 caption="[See the full-sized picture](16-user-details-api-rest.png)" >}}
 
 NOTE: If you examined your `contrast_security.yaml` file, you will notice some of the same fields.
-  
+
+---
+### Your Organization ID
+
+On Teamserver, users belong to one or more *organizations* as a grouping mechanism.   All members of this workshop belong to the same organization, so it is easier for members to see each other's results.
+
+Companies use organizations to group by team, product, location, or any other logical structure suitable for their business.  
+
+---
+### Your API Key
+
+API access does not use your username and password.
+
+Instead, API access utilizes secrets.  One of them is the API key.
+
+On TeamServer, the API key is a secret required to access the API via command line or REST calls.  The examples of this workshop use your API key.
+
 ---
 ### Generate Sample API Request
 
-The last piece of information is your Authorization Key.  Click on the "Generate Sample API Request" button on the Rest API Details page. 
+The next piece of information is your Authorization Key.  Click on the "Generate Sample API Request" button on the Rest API Details page. 
 
-The Authorization is the string of characters following the `-H 'Authorization:` text.  This Authorization value is necessary for REST API transactions.  You'll use this information in CLI, or your preferred programming environment.  This final piece is:
+The Authorization is the string of characters following the `-H 'Authorization:` text.  This Authorization value is necessary for REST API transactions.  You'll use this information in CLI, or your preferred programming environment.  
 
-- `{authorization_key}`
+We'll refer to this value as `{authorization_key}`
+
+From a programming perspective, this information is sent along with your *Headers* when performing a REST call. 
 
 {{< figure src="16-user-details-api-auth.png" >}}
 
 ---
-### Setup files
-
-In this module, we provide helper scripts to make it easier for you to run commands.
-
-Run this setup script to make things a little easier, where you will be prompted for these values:
-- `{org_uuid}`
-- `{api_key}`
-- `{authorization_key}`
-- `{app_id}`
-
-In the checkout directory (should be "workshop"), execute the following commands in *Powershell*:
-```powershell
-cd %HOMEPATH%\workshop\scripts\module1
-setup.ps1
-```
-
-The setup script will prompt you for details to create helper scripts.  These helper scripts are meant to make it easier to run API commands.  The outputs will be scripts with the content you need.  You can always re-run `setup.bat` to reset your scripts.
-
----
 ### Sample API Request
-If you navigate to Your Account->Profile, you'll see a button to "Generate Sample API Requst."  This is a multi-line command suitable for Linux distributions, but not convenient for Windows environments.  The next page will help you with that command.
+The sample API rquest is a multi-line command suitable for Linux distributions, but not convenient for Windows environments.  Since this workshop uses Windows machines, we'll need to reformat the commands.  Fortunately, we also provide helper-scripts to make the process easier.
 
 {{< figure src="16-your-account-profile.png" height="400px"
 caption="[See the full-sized picture](16-your-account-profile.png)"
 >}}
 
 ---
+### Your Application ID
+
+One more piece of information is the unique ID for your application.
+
+On Teamserver, navigate to your application and examine the URL which is structured similarly to the following:
+ 
+```text
+https://eval.contrastsecurity.com/Contrast/static/ng/index.html#/c992a0ef-e965-4f92-a410-e09256a78758/applications/2ac60539-9d58-4365-a006-dc0fc51efc7e
+```
+
+The two embedded IDs are your organization ID and then your Application ID.  The ID after  `applications/` is your application ID and has the following value for the example above.
+
+- `2ac60539-9d58-4365-a006-dc0fc51efc7e`
+
+Make note of the Application ID because we'll need for other examples.
+
+---
+### Source code: scripts
+
+We've published files to GitHub for you to access.
+
+Check out the code to get helper scripts for this module.  We'll assume you are always working from the same base directory as shown by the `%HOMEPATH%` reference below.
+ 
+From your workstation, open a command prompt and run the following command:
+
+```
+cd %HOMEPATH%
+git clone https://github.com/Contrast-Security-OSS/workshop
+```
+
+The command-line commands you will run will be from the checked out folder, named `workshop.`
+  
+The next slide contains instructions to get started.
+
+---
+### Setup files
+
+Execute the following commands in *Powershell* to generate client scripts to access the API:
+```powershell
+cd %HOMEPATH%\workshop\scripts\module5
+.\setup.ps1
+```
+
+You will be prompted for these values:
+- `{org_uuid}`
+- `{api_key}`
+- `{authorization_key}`
+- `{app_id}`
+
+The outputs are scripts with the content you need.  You can always re-run `setup.bat` to reset your scripts.
+
+---
 ### Sample API Request - Output
 
-We created a helper script that does the operation for you, which you can run with the following command:
+The first script we have helps you get the list of all applications in your organization.
 
-```text
-cd %HOMEPATH%\workshop\scripts\module1
+Run with the following command to observe the results via the API:
+
+```
+cd %HOMEPATH%\workshop\scripts\module5
 get-application-details.bat
 ```
 
@@ -310,26 +321,25 @@ The results are similar to the contents below.  This is the first example of the
 {{< slide id="libraries" >}}
 ### Libraries - TeamServer
 
-Next, navigate to your WebGoat application and click into the Libraries subpage to see a page similar to what is shown below.  When you see the list of several dozen libraries, you may be reminded how teams will want to use the information presented here in their automation tasks.  
+Next, navigate to your WebGoat application and click into the Libraries subpage to see a page similar to what is shown below.
 
-{{< figure src="09-webgoat-libraries.png"
+You can acceess this page by navigating to your application page, and then clicking on the "Libraries" subheading.
+  
+When you see the list of several dozen libraries, you may be reminded how teams use similar information in their automation tasks.  
+
+{{< figure src="09-webgoat-libraries.png" height="400px"
 caption="[See the full-sized picture](09-webgoat-libraries.png)"
 >}}
 
 ---
 ### Third-party Software
-{{% note %}}
-Describe the value of being able to see third-party software
-{{% /note %}}
 
-When Contrast Security identifies third party components in your application, your teams want to know the following:
+In a previous module, we covered how teams use Library details because they want to know the following:
 - What third-party software are we including?
 - What third-party software are we using?
 - Are we in compliance with those third-party software components?
 
-Contrast Security identifies only those libraries that are actually loaded by the application into the runtime.  Traditional SCA tools typically report on all libraries, regardless of use.  This means Contrast Security helps your team stay more focused on only those libraries in actual use, saving valuable time.  
-
-Your team will want to automate processes to find details _interesting_ to them.  Let's see how that works next.
+Your team will want to automate processes to find details _interesting_ to them.  The next example shows the same result via API call.
 
 ---
 ### Library via API call
@@ -337,16 +347,16 @@ Your team will want to automate processes to find details _interesting_ to them.
 As with other aspects of Contrast Security, the API lets you programmatically access details.
 {{% /note %}}
 
-This information available via API as well:
+The REST call has a structure similair to previous examples:
 
-```bash
+```text
 curl -X GET https://ce.contrastsecurity.com/Contrast/api/ng/{org_uuid}/libraries -H "Authorization:{authorization_key}" -H "API-Key:{api_key}"
 ```
 
 On your workstation, we've made it easy for you to run the command with a script:
 
-```shell script
-cd %HOMEPATH%/workshop/scripts/module1
+```
+cd %HOMEPATH%\workshop\scripts\module5
 get-libraries.bat
 ```
 
@@ -408,15 +418,15 @@ caption="[See the full-sized picture](09-webgoat-vulnerabilities.png)"
 
 Similar to the Libraries request, we have a sample API call to get a summary of found vulnerabilities where details specific to your application and server are represented by the values in braces `{}`.
 
-```bash
+```text
 curl -X GET https://eval.contrastsecurity.com/Contrast/api/ng/{org_uuid}/traces/{app_id}/quick -H "Authorization:{authorization_key}" -H "API-Key:{api_key}"
 curl -X GET https://eval.contrastsecurity.com/Contrast/api/ng/{org_uuid}/traces/{app_id}/ids -H "Authorization:{authorization_key}" -H "API-Key:{api_key}"
 ```
 
 On your workstation, we've made it easy for you to run the command with a script where we filled in the missing details.
 
-```shell script
-cd %HOMEPATH%/workshop/scripts/module1
+```
+cd %HOMEPATH%\workshop\scripts\module5
 get-vulnerabilities.bat
 ```
 
@@ -468,8 +478,11 @@ Close out the session with your team.
 
 In this hands-on example, you have seen how Contrast Security works with your application to reveal vulnerabilities during your testing, and how we protect your application at runtime.
 
-We encourage you to try different attacks
-Now you can try to exploit WebGoat again and see what happens.  Change some policies for your application, or try different exercises within WebGoat.
+We encourage you to try different API calls and use this page as a reference:
+
+```
+https://api.contrastsecurity.com/
+```
 
 Your instructor will provide guidance as needed.
 
