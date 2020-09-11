@@ -49,7 +49,9 @@ Jump to:
 {{< slide id="module-introduction" >}}
 ## Module Introduction
 
-In this section we'll guide you through a sequence of steps to instrument an application and deploy it.  This application is a Java application configured to run in a docker container.  We'll walk you through the sequence of creating and configuring the application so it runs in a container.
+This module is primarily a sequence of hands-on activities.
+
+In this section we'll guide you through a sequence of steps to instrument a Java application, running in a container and deploy it.
 
 This example provides insight into how teams bring Contrast Security into their organization quickly and easily.   While each team may have processes that are tailored to their environment, the general sequence provided here should track to all teams.
 
@@ -82,7 +84,7 @@ _NOTE: This code may already be on your workshop workstation._
 
 Check out the code on your workstation with the following commands:
 
-```text
+```commandline
 cd %HOMEPATH%
 git clone https://github.com/Contrast-Security-OSS/workshop
 git clone https://github.com/Contrast-Security-OSS/WebGoat-Lessons-BBP.git webgoat-lessons
@@ -95,7 +97,7 @@ git clone https://github.com/Contrast-Security-OSS/WebGoat_BBP_FORK.git webgoat
 If you are curious, navigate through the directory structure to see the different files and its organization.  This is a maven project, split up into different types of targets.  The project README contains more details.
 
 ---
-### Build the code
+### Build the code - Step 1
 {{% note %}}
 You can get maven from this location:
 https://apache.claz.org/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.zip
@@ -106,26 +108,39 @@ https://maven.apache.org/install.html
 
 We will build the code at the command line for the benefit of developers already accustomed to the process.  While you may build via your IDE, we have learned the base CLI example allows most developers to see how the process applies to their day-to-day experiences.
 
-_The following commands checkout and build code in the same style and sequence you would on your local machine and CI server._
+_The following commands check out and build code in the same style and sequence you would on your local machine and CI server._
 
-The three maven (mvn) commands setup the project...
-```text
+The first step is to setup the project...
+```commandline
 cd %HOMEPATH%\webgoat
 git checkout contrast-demo-webgoat-7.1
 mvn clean compile install
 ```
-add lesson materials...
-```text
+
+---
+### Build the code - Step 2
+
+Next, build the lesson materials...
+
+```commandline
 cd %HOMEPATH%\webgoat-lessons
 git checkout develop
 mvn package
 xcopy "target\plugins\*.jar" "..\webgoat\webgoat-container\src\main\webapp\plugin_lessons\"
 ```
-and then generate a jar file.
-```text
+
+---
+### Build the code - Step 3
+
+The final step is to combine the results into a jar file.
+```commandline
 cd %HOMEPATH%\webgoat
 mvn package
 cd webgoat-container\target
+```
+You now have a working jar file.  This next command runs your application:
+
+```commandline
 java -jar webgoat-container-7.1-war-exec.jar
 ```
 
@@ -181,7 +196,7 @@ caption="[See the full-sized picture](2-ts-agent-java.png)"
 
 Make sure you move the file to the correct directory.  This folder is usually the "Downloads" folder on your Windows workstation, and you can copy the file to the <b>webgoat</b> working directory with this command
 
-```text
+```commandline
 cd %HOMEPATH%\webgoat
 copy %HOMEPATH%\Downloads\contrast*.jar . 
 ```
@@ -190,15 +205,18 @@ This places the contrast jar file in the same directory where we'll build our Do
 
 ---
 ### Get the `contrast_security.yaml` file
-The file `contrast_security.yaml` contains information to connect your running application with TeamServer.  In TeamServer, skip to the next step to download the basic configuration file as shown in the image below.
+The file `contrast_security.yaml` contains information to connect your running application with TeamServer.
 
-{{< figure src="2-ts-agent-contrast-yaml.png" height="400px"
-caption="[See the full-sized picture](2-ts-agent-contrast-yaml.png)"
->}}
+In TeamServer, skip to the next step to download the basic configuration file as shown in the image below.
 
+{{< figure src="2-ts-agent-contrast-yaml.png" height="350px"
+caption="[See the full-sized picture](2-ts-agent-contrast-yaml.png)">}}
+
+---
+### Copy `contrast_security.yaml`
 Copy this file to your working directory:
 
-```text
+```commandline
 cd %HOMEPATH%\webgoat
 copy %HOMEPATH%\Downloads\contrast_security.yaml . 
 ```
@@ -210,7 +228,7 @@ NOTE: More details about configuration options are available at this location: h
 
 Your webgoat working directory should look similar to the the image below, with the newly added `contrast.jar` and `contrast_security.yaml` files:
 
-```text
+```commandline
 dir %HOMEPATH%\webgoat
 
  Volume in drive C is Windows
@@ -240,17 +258,24 @@ dir %HOMEPATH%\webgoat
 ---
 ### Alternate agent downloads
 
-Sometimes teams wish to automate the download of the agent to their system.  The commands below use curl to get the latest version of the agent from Maven Central.  Your teams may use a similar command or declare a maven dependency to get the agent.  You may also wish to specify a version instead of the latest.
+One option to automate the download the agent is to use curl to get the latest version from  Maven Central.
+
+You may even specify a version instead of the latest.
 
 Here is the raw curl command which downloads the Contrast agent for Linux systems:
 
-```shell script
+```commandline
 curl --fail --silent --location "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.contrastsecurity&a=contrast-agent&v=LATEST" -o /opt/contrast/contrast.jar
 ```
 
 And for Windows Systems:
-```text
+```commandline
 curl --fail --silent --location "https://repository.sonatype.org/service/local/artifact/maven/redirect?r=central-proxy&g=com.contrastsecurity&a=contrast-agent&v=LATEST" -o %HOMEPATH%\contrast.jar
+```
+
+Windows Powershell users:
+```powershell
+Invoke-WebRequest -Uri "https://eval.contrastsecurity.com/Contrast/api/ng/$(contrast-id)/agents/default/JAVA" -OutFile .\contrast.jar
 ```
 
 See this link for a listing of available Java agents on Maven Central:
@@ -259,28 +284,36 @@ https://repository.sonatype.org/#nexus-search;quick~com.contrastsecurity
 ---
 {{< slide id="the-webgoat-container" >}}
 ## The WebGoat Container
+{{% note %}}
+Some teams have a build-test-deploy lifecycle built into their Dockerfile.  We are only doing build.
+{{% /note %}}
 
 Once you have a jar file, the agent, and your `contrast_security.yaml` file, you have all the pieces to build a Docker image.
 
-We know some teams have a comprehensive Dockerfile with both the build and packaging steps included.  In this module, we are separating the two processes to focus on a simple Dockerfile. 
+Teams have different Dockerfile strategies.  In this module, we are using a simple model. 
 
-Your Dockerfile is out on your workstation as `%HOMEPATH%\webgoat\Dockerfile`, pulled from this location: https://github.com/Contrast-Security-OSS/WebGoat_BBP_FORK/blob/contrast-demo-webgoat-7.1/Dockerfile.
-
-This gist is a copy of that file:
+Your Dockerfile is on your workstation as `%HOMEPATH%\webgoat\Dockerfile`, and this gist is a copy of that file:
 {{< gist marcoman df3cabe88865d8dc38e499843df96f5a >}}
 
 Let's examine the contents of the DockerFile next.
 
 ---
 ### Dockerfile deconstructed
+{{% note %}}
+Your teams may use other images, as long as the container environment supports the requirements.
 
-The first line is the declaration of the base image for your container.  For this exercise, we're using a Linux-based image that includes Java named `openjdk:8-slim`.  Your teams may use other images, as long as the container environment supports the requirements.  
+Some teams create a corporate base image and add common libraries and configuration to be shared across all of their applications.  This model helps those teams reduce the time needed to re-package the same items, and helps establish consistency.  Those teams will add the Contrast Security agent to the base image.  This module focuses on a simpler model, where the techniques apply to corporate base image.
+
+{{% /note %}}
+
+The first line is the declaration of the base image for your container.  
+
+For this exercise, we're using a Linux-based image that includes Java named `openjdk:8-slim`.  
   
 ```dockerfile
 # Ensure the contrast security jar is downloaded and available as "contrast.jar" in the appropriate directory.
 FROM openjdk:8-slim
 ```
-Some teams create a corporate base image and add common libraries and configuration to be shared across all of their applications.  This model helps those teams reduce the time needed to re-package the same items, and helps establish consistency.  Those teams will add the Contrast Security agent to the base image.  This module focuses on a simpler model, where the techniques apply to corporate base image.
 
 ---
 {{< slide template="info" >}}
@@ -292,8 +325,11 @@ https://docs.contrastsecurity.com/en/java-supported-technologies.html
 
 ---
 ### Add the application definition
+{{% note %}}
+The common operation is to transfer the binary to a subdirectory on the running container.  Sometimes there is additional configuration in the form of files or environment variables, and that is specific to your application definition.
+{{% /note %}}
 
-The next three commands are where we add the application to the container definition.  The common operation is to transfer the binary to a subdirectory on the running container.  Sometimes there is additional configuration in the form of files or environment variables, and that is specific to your application definition.
+The next three commands are where we add the application to the container definition.  
 
 Since we already have a jar file, we'll copy it to the container.
 
@@ -304,29 +340,35 @@ ADD ./webgoat-container/target/webgoat-container-7.1-war-exec.jar /webgoat7.1/we
 ```
 ---
 ### Add the contrast security agent
+{{% note %}}
+We'll continue to rely on a simple model of adding the agent to your container.
+{{% /note %}}
 
-The next step is to add the contrast agent to the container definition.  As with the application, the process is about transferring the binary to a subdirectory on the system.  We'll continue to rely on a simple model of adding the agent to your container.
+The next step is to add the contrast agent to the container definition.  
 
-Contrast Security supports the local best practices your teams may use to to download the agent:
-- A dependency in their maven (or gradle) file for the specific version of the agent
-- A step in their CI process to acquire the agent
-- A line in their Dockerfile to perform a curl operation on an external repository.
+As with the application, the process is about transferring the binary to a subdirectory on the system.  
 
 ```dockerfile
 RUN mkdir /opt/contrast
 ADD contrast.jar /opt/contrast
 ```
+Contrast Security supports the local best practices your teams may use to to download the agent:
+- A dependency in their maven (or gradle) file for the specific version of the agent
+- A step in their CI process to acquire the agent
+- A line in their Dockerfile to perform a curl operation on an external repository.
 
 ---
 ### Add the `contrast_security.yaml`
 
-The `contrast_security.yaml` has details to enable your Java agent to communicate with TeamServer, including the TeamServer URL.  The file you download is short and simple, and it can be extended with many more fields to suit the needs of your team.  
+The `contrast_security.yaml` has details to enable your Java agent to communicate with TeamServer, including the TeamServer URL.  
 
-See the online documentation for more examples of how to enhance the configuration of an application.
+The file you download is short and can be extended with many more fields to suit the needs of your team.  
 
 ```dockerfile
 ADD contrast_security.yaml /opt/contrast
 ```
+
+See the online documentation for more examples of how to enhance the configuration of an application.
 
 ---
 {{< slide template="warning" >}}
@@ -336,34 +378,38 @@ In this module, we are including the contrast_security.yaml file directly into y
 
 ---
 ### Configure environment variables
-
+{{% note %}}
 You add details specific to your application, secrets, and other unique values via environment variables.  Some of the details in the `contrast_security.yaml` file may also be supplied via environment variables, but we'll continue keeping the model simple for this exercise.
+{{% /note %}}
+
+You can define values via environment variables, or with the `contrast_security.yaml` file.  
+
+We are using environment variables to avoid editing the `contrast_security.yaml` file.
 
 The environment variables below identify the path to the contrast agent, and the security file:
 
 ```dockerfile
-ENV JAVA_TOOL_OPTIONS "-javaagent:/opt/contrast/contrast.jar -Dcontrast.java.agent.standalone_app_name=Webgoat -Dcontrast.config.path=/opt/contrast/contrast_security.yaml -Dcontrast.application.tags=workshop,webgoat"
+ENV JAVA_TOOL_OPTIONS "-javaagent:/opt/contrast/contrast.jar \
+    -Dcontrast.java.agent.standalone_app_name=Webgoat \
+    -Dcontrast.config.path=/opt/contrast/contrast_security.yaml \ 
+    -Dcontrast.application.tags=workshop,webgoat"
 ```
-
-We specify the name of the application to be "module2-webgoat" on TeamServer with the `contrast.java.agent.standalone_app_name` parameter.  
-
-We also specify an application tag to help you see a little more detail.  This is one way teams enhance their application deployments.  Another enhancement is to use variables or other build- and run-time data to provide more precise details to  built and deployed software.
-
 ---
-### Build the image
+### Build the Docker image
+Let's build the Docker image:
 
-Let's go ahead and build the Docker image:
-
-```text
+```commandline
 cd %HOMEPATH%\webgoat
 docker build . -t workshop/contrast-demo-java-webgoat:1.0
 ```
 
 The command above instructs Docker to build the image using the Dockerfile in the current folder, and this image should be tagged as 'workshop/contrast-demo-java-webgoat'.  
 
-Try this command to verify the existence of your Docker image:
+---
+### Verify Docker image
+This command verifies the existence of your Docker image:
 
-```text
+```commandline
 docker image ls
 REPOSITORY                             TAG                 IMAGE ID            CREATED             SIZE
 workshop/contrast-demo-java-webgoat    1.0                 35fc72aaeb50        7 seconds ago       356MB
@@ -377,9 +423,7 @@ mcr.microsoft.com/windows/nanoserver   1809                9e7d556b2b51        3
 ### Run the image
 Let's try this with the container we have created.
 
-To apply environment variables when you run your docker container, you can use the `-e` command line setting, for example:
-
-```text
+```commandline
 docker run -p 8080:8080 workshop/contrast-demo-java-webgoat:1.0
 ``` 
 
@@ -390,19 +434,19 @@ Now we're ready to navigate to the application, it should be running at [http://
 
 Run the following command to see your running docker container:
 
-```text
+```commandline
 docker container ls
 ```
 
 You should see you image listed as below:
-```text
+```commandline
 CONTAINER ID        IMAGE                                        COMMAND                  CREATED             STATUS              PORTS                    NAMES
 7fb59741c6fe        workshop/contrast-demo-java-webgoat:latest   "java -jar /webgoat7…"   10 minutes ago      Up 10 minutes       0.0.0.0:8080->8080/tcp   agitated_hamilton
 ```
 
-Let's stop the running container with the following command, using the ID above as an example (`7fb59741c6fe`)
+Stop the running container with the following command, using the ID above as an example (`7fb59741c6fe`)
 
-```text
+```commandline
 docker container stop 7fb59741c6fe
 ```
 
@@ -430,7 +474,7 @@ ENTRYPOINT ["java","-jar","/webgoat7.1/webgoat-container-7.1-exec.jar"]
 
 The enhanced Dockerfile is already present on your system as `Dockerfile2`.  In this next command, we'll specify the file in the build operation:
 
-```text
+```commandline
 cd %HOMEPATH%\webgoat
 docker build -f Dockerfile2 . -t workshop/contrast-demo-java-webgoat:2.0
 ```
@@ -439,10 +483,16 @@ docker build -f Dockerfile2 . -t workshop/contrast-demo-java-webgoat:2.0
 
 You now need to pass the values from your contrast_security.yaml file as environment variables.  Run the docker file with values plugged into the values indicated by {} below:
 
-```text
-
-docker run -e CONTRAST__URL=https://eval.contrastsecurity.com/Contrast -e CONTRAST__API__API_KEY={YOUR_API_KEY} -e CONTRAST__API__SERVICE_KEY={YOUR_SERVICE_KEY} -e CONTRAST__API__USER_NAME={YOUR_USERNAME} -p 8080:8080 workshop/contrast-demo-java-webgoat:latest
+```commandline
+docker run -e CONTRAST__URL=https://eval.contrastsecurity.com/Contrast 
+    -e CONTRAST__API__API_KEY={YOUR_API_KEY}
+    -e CONTRAST__API__SERVICE_KEY={YOUR_SERVICE_KEY}
+    -e CONTRAST__API__USER_NAME={YOUR_USERNAME}
+    -p 8080:8080 workshop/contrast-demo-java-webgoat:2.0
 ``` 
+
+---
+### Running with a helper script
 
 We also have a helper script to make this step easier.  Execute the following commands where you will be asked to supply the following details:
 - `{org_uuid}`
@@ -451,7 +501,7 @@ We also have a helper script to make this step easier.  Execute the following co
 - `{username}`
 - `{service_key}`
 
-```text
+```commandline
 cd %HOMEPATH%\workshop\scripts\module2
 setup.bat
 ```
@@ -478,7 +528,7 @@ Click through some screens, test some paths, show cause-and-effect from the appl
 
 When you done running your application, run the following command to see your running docker container, and use the Container ID to stop the running container.
 
-```text
+```commandline
 docker container ls
 CONTAINER ID        IMAGE                                        COMMAND                  CREATED             STATUS              PORTS                    NAMES
 7fb59741c6fe        workshop/contrast-demo-java-webgoat:latest   "java -jar /webgoat7…"   10 minutes ago      Up 10 minutes       0.0.0.0:8080->8080/tcp   agitated_hamilton
@@ -486,7 +536,7 @@ CONTAINER ID        IMAGE                                        COMMAND        
 
 Stop the running container with the following command, using the ID above as an example (`7fb59741c6fe`)
 
-```text
+```commandline
 docker container stop 7fb59741c6fe
 ```
 

@@ -5,8 +5,14 @@ theme = "reveal-hugo"
 
 publishDir = "local"
 
-[markup.goldmark.renderer]
-unsafe = true
+[markup]
+    defaultMarkdownHandler = "goldmark"
+    [markup.goldmark]
+    [markup.highlight]
+        style = "monokai"
+        lineNumbersInTable = true
+        [markup.goldmark.renderer]
+        unsafe = true
 
 [outputFormats.Reveal]
 baseName = "index"
@@ -14,7 +20,7 @@ mediaType = "text/html"
 isHTML = true
 
 [params.reveal_hugo]
-theme = "contrast"
+theme = "white"
 progress = true
 slide_number = true
 hash = true

@@ -65,7 +65,7 @@ We'll also show you how to exercise some exploits to observe how Contrast Securi
 ---
 {{< slide template="info" >}}
 ### Time and Prerequisites
-This module should take about 45 minutes to complete.
+This module should take about 60 minutes to complete.
 
 Be sure to have completed the [prerequisites](../#/setup-and-prerequisites)  
 
@@ -161,6 +161,9 @@ This screenshot is an example of a dashboard after a few hundred applications ha
 
 {{< figure src="m1-dashboard.png" height="400px" >}}
 [See the full-sized picture](m1-dashboard.png)
+
+We'll other pages in TeamServer after we run your sample application. 
+
 
 ---
 ### Ongoing Data Collection
@@ -572,7 +575,7 @@ The overview page summarizes the Path Traversal vulnerability similarly to previ
 Again, you can see the highlighted input data to help your team more quickly diagnose and troubleshoot vulnerabilities.
 
 {{< figure src="17-webgoat-path-overview.png"  height="500px"
-caption="[See the full-sized picture](17-webgoat-path-overview.png.png)"
+caption="[See the full-sized picture](17-webgoat-path-overview.png)"
 >}}
 
 ---
@@ -582,7 +585,7 @@ The overview page summarizes the Path Traversal vulnerability similarly to previ
 The essential detail on this page is the line about "Untrusted data used to open file" showing how the file reference is passed along to a file operation.  The flaw is created by the concatenations in the previous lines and shown here.
 
 {{< figure src="17-webgoat-path-details.png"  height="500px"
-caption="[See the full-sized picture](17-webgoat-path-details.png.png)"
+caption="[See the full-sized picture](17-webgoat-path-details.png)"
 >}}
 
 ---
