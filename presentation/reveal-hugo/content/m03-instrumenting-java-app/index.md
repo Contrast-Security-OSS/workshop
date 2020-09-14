@@ -307,23 +307,27 @@ We will cover this on the next page.
 ### Running the agent with Contrast Security
 
 We'll start by expanding the command over several lines to highlight different arguments where, 
-- The first line contains the path to your configuration file.
-- The second line contains the path to the agent jar file
-- The final line is the parameter to Java with a path to the application jar.
+- The path to your configuration file.
+- The name of the application in TeamServer
+- The path to the agent jar file
+- The path to the application jar
 
 ```shell script
 java -Dcontrast.config.path=contrast_security.yaml 
+-Dcontrast.application.name=myname-webgoat
 -javaagent:contrast.jar 
 -jar webgoat-container-7.1-war-exec.jar
 ```
 
+---
+### Run your application
 Run these commands to start the application with Contrast Security enabled:
 
-TODO: Add the user's name to this command
+TODO: Add your name to the command below
 
 ```commandline
 cd %HOMEPATH%\webgoat\
-java -Dcontrast.config.path=contrast_security.yaml -javaagent:contrast.jar -jar webgoat-container\target\webgoat-container-7.1-war-exec.jar
+java -Dcontrast.config.path=contrast_security.yaml -Dcontrast.application.name=yourname-webgoat-javaagent:contrast.jar -jar webgoat-container\target\webgoat-container-7.1-war-exec.jar 
 ```
 
 ---
@@ -385,11 +389,41 @@ Many teams find it convenient to use environment variables to configure their op
 The contents of the `contrast_security.yaml` file can instead be supplied via environment variables with these definitions:
 
 ```commandline
-set CONTRAST__API__URL=http://eval.contrastsecurity.com/Contrast
-set CONTRAST__API__API_KEY=YOUR_API_KEY
+set CONTRAST__API__URL=https://eval.contrastsecurity.com/Contrast
+set CONTRAST__API_KEY=YOUR_API_KEY
 set CONTRAST__API__USER_NAME=YOUR_USERNAME
 set CONTRAST__API__SERVICE_KEY=YOUR_SERVICE_KEY
 ```
+
+---
+### Set your environment variables
+
+At your command prompt, enter each line and replace the contents with your details.
+Your instructor will guide you through each line.
+
+```commandline
+set CONTRAST__API__URL=https://eval.contrastsecurity.com/Contrast
+```
+
+```commandline
+set CONTRAST__API__API_KEY=YOUR_API_KEY
+```
+
+```commandline
+set CONTRAST__API__USER_NAME=YOUR_USERNAME
+```
+
+```commandline
+set CONTRAST__API__SERVICE_KEY=YOUR_SERVICE_KEY
+```
+
+```commandline
+set CONTRAST__APPLICATION__NAME=Your new app name
+set CONTRAST__APPLICATION__TAGS=webgoat,yourname
+```
+
+---
+### Run with environment variables
 
 Once set, you can next run your application with a command that does _not_ include a reference to `contrast_security.yaml`
 
