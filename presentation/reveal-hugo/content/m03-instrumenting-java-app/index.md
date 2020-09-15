@@ -327,7 +327,7 @@ TODO: Add your name to the command below
 
 ```commandline
 cd %HOMEPATH%\webgoat\
-java -Dcontrast.config.path=contrast_security.yaml -Dcontrast.application.name=yourname-webgoat-javaagent:contrast.jar -jar webgoat-container\target\webgoat-container-7.1-war-exec.jar 
+java -Dcontrast.config.path=contrast_security.yaml -Dcontrast.application.name=yourname-webgoat -javaagent:contrast.jar -jar webgoat-container\target\webgoat-container-7.1-war-exec.jar 
 ```
 
 ---
@@ -446,6 +446,17 @@ It is convenient to tag your application and server with keyboards to help you b
 - other details important for your team
 
 The next pages show examples based on the details above. 
+
+---
+### See other properties
+
+Explore some options with this command:
+
+```commandline
+java -jar contrast.jar properties --filter="KEY"
+java -jar contrast.jar properties --filter="TAG"
+java -jar contrast.jar properties --filter="LOG"
+```
  
 ---
 ### Try System Properties
