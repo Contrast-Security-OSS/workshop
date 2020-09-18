@@ -100,6 +100,7 @@ cd %HOMEPATH%
 git clone https://github.com/Contrast-Security-OSS/workshop
 git clone https://github.com/Contrast-Security-OSS/WebGoat-Lessons-BBP.git webgoat-lessons
 git clone https://github.com/Contrast-Security-OSS/WebGoat_BBP_FORK.git webgoat
+
 ```
 
 ---
@@ -126,6 +127,7 @@ The first step is to setup the project...
 cd %HOMEPATH%\webgoat
 git checkout contrast-demo-webgoat-7.1
 mvn clean compile install
+
 ```
 
 ---
@@ -138,6 +140,7 @@ cd %HOMEPATH%\webgoat-lessons
 git checkout develop
 mvn package
 xcopy "target\plugins\*.jar" "..\webgoat\webgoat-container\src\main\webapp\plugin_lessons\"
+
 ```
 
 ---
@@ -148,11 +151,13 @@ The final step is to combine the results into a jar file.
 cd %HOMEPATH%\webgoat
 mvn package
 cd webgoat-container\target
+
 ```
 You now have a working jar file.  This next command runs your application:
 
 ```commandline
 java -jar webgoat-container-7.1-war-exec.jar
+
 ```
 
 You now have a working jar file, and you can browse to your application at:
@@ -200,7 +205,8 @@ This folder is usually the "Downloads" folder on your Windows workstation, and y
 ```commandline
 cd %HOMEPATH%\webgoat
 copy %HOMEPATH%\Downloads\contrast*.jar . 
- ```
+
+```
 
 This places the contrast jar file in the same directory where we'll run our application.
 
@@ -220,6 +226,7 @@ Copy this file to your working directory:
 ```commandline
 cd %HOMEPATH%\webgoat
 copy %HOMEPATH%\Downloads\contrast_security.yaml . 
+
 ```
 
 NOTE: More details about configuration options are available at this location: https://docs.contrastsecurity.com/en/java.html#java-template
@@ -295,6 +302,7 @@ https://repository.sonatype.org/#nexus-search;quick~com.contrastsecurity
 We have already seen how we can easily run a java application from a jar file with this command:
 ```commandline
 java -jar webgoat-container-7.1-war-exec.jar
+
 ```
 
 You can run the same application with the Contrast Security agent by adding a few extra options at the command line to specify
@@ -317,6 +325,7 @@ java -Dcontrast.config.path=contrast_security.yaml
 -Dcontrast.application.name=myname-webgoat
 -javaagent:contrast.jar 
 -jar webgoat-container-7.1-war-exec.jar
+
 ```
 
 ---
@@ -327,7 +336,8 @@ TODO: Add your name to the command below
 
 ```commandline
 cd %HOMEPATH%\webgoat\
-java -Dcontrast.config.path=contrast_security.yaml -Dcontrast.application.name=yourname-webgoat -javaagent:contrast.jar -jar webgoat-container\target\webgoat-container-7.1-war-exec.jar 
+java -Dcontrast.config.path=contrast_security.yaml -Dcontrast.application.name=yourname-webgoat -javaagent:contrast.jar -jar webgoat-container\target\webgoat-container-7.1-war-exec.jar
+ 
 ```
 
 ---
@@ -430,6 +440,7 @@ Once set, you can next run your application with a command that does _not_ inclu
 ```commandline
 cd %HOMEPATH%\webgoat\
 java -javaagent:contrast.jar -jar webgoat-container\target\webgoat-container-7.1-war-exec.jar
+
 ```
 
 ---

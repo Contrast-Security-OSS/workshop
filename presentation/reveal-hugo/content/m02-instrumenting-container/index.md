@@ -89,6 +89,7 @@ cd %HOMEPATH%
 git clone https://github.com/Contrast-Security-OSS/workshop
 git clone https://github.com/Contrast-Security-OSS/WebGoat-Lessons-BBP.git webgoat-lessons
 git clone https://github.com/Contrast-Security-OSS/WebGoat_BBP_FORK.git webgoat
+
 ```
 
 ---
@@ -115,6 +116,7 @@ The first step is to setup the project...
 cd %HOMEPATH%\webgoat
 git checkout contrast-demo-webgoat-7.1
 mvn clean compile install
+
 ```
 
 ---
@@ -127,6 +129,7 @@ cd %HOMEPATH%\webgoat-lessons
 git checkout develop
 mvn package
 xcopy "target\plugins\*.jar" "..\webgoat\webgoat-container\src\main\webapp\plugin_lessons\"
+
 ```
 
 ---
@@ -137,11 +140,13 @@ The final step is to combine the results into a jar file.
 cd %HOMEPATH%\webgoat
 mvn package
 cd webgoat-container\target
+
 ```
 You now have a working jar file.  This next command runs your application:
 
 ```commandline
 java -jar webgoat-container-7.1-war-exec.jar
+
 ```
 
 You now have a working jar file, and you can browse to your application at:
@@ -198,7 +203,8 @@ Make sure you move the file to the correct directory.  This folder is usually th
 
 ```commandline
 cd %HOMEPATH%\webgoat
-copy %HOMEPATH%\Downloads\contrast*.jar . 
+copy %HOMEPATH%\Downloads\contrast*.jar .
+ 
 ```
 
 This places the contrast jar file in the same directory where we'll build our Docker image.
@@ -219,6 +225,7 @@ Copy this file to your working directory:
 ```commandline
 cd %HOMEPATH%\webgoat
 copy %HOMEPATH%\Downloads\contrast_security.yaml . 
+
 ```
 
 NOTE: More details about configuration options are available at this location: https://docs.contrastsecurity.com/en/java.html#java-template
@@ -401,6 +408,7 @@ Let's build the Docker image:
 ```commandline
 cd %HOMEPATH%\webgoat
 docker build . -t workshop/contrast-demo-java-webgoat:1.0
+
 ```
 
 The command above instructs Docker to build the image using the Dockerfile in the current folder, and this image should be tagged as 'workshop/contrast-demo-java-webgoat'.  
@@ -425,6 +433,7 @@ Let's try this with the container we have created.
 
 ```commandline
 docker run -p 8080:8080 workshop/contrast-demo-java-webgoat:1.0
+
 ``` 
 
 Now we're ready to navigate to the application, it should be running at [http://localhost:8080](http://localhost:8080).
@@ -436,6 +445,7 @@ Run the following command to see your running docker container:
 
 ```commandline
 docker container ls
+
 ```
 
 You should see you image listed as below:
@@ -477,6 +487,7 @@ The enhanced Dockerfile is already present on your system as `Dockerfile2`.  In 
 ```commandline
 cd %HOMEPATH%\webgoat
 docker build -f Dockerfile2 . -t workshop/contrast-demo-java-webgoat:2.0
+
 ```
 ---
 ### Running the container
@@ -504,6 +515,7 @@ We also have a helper script to make this step easier.  Execute the following co
 ```commandline
 cd %HOMEPATH%\workshop\scripts\module2
 setup.bat
+
 ```
 
 ---
