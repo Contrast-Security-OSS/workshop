@@ -24,8 +24,8 @@ transition = "zoom"
 [reveal_hugo.templates.warning]
 background = "#fa220a"
 transition = "zoom"
-
 +++
+
 {{% note %}}
 Instructors: you'll need to configure a few things for this workshop available in the GitHub repository.  Each section has a README to guide you.
 
@@ -525,6 +525,7 @@ In this hands-on example, you have seen how Contrast Security works with a Java 
 Your instructor will provide guidance as needed.
 
 ---
+{{< slide id="conclusion" >}}
 ## Conclusion
 This concludes the module.
 Your instructor will inform you about how long your environment will remain in operation and if you will be covering other modules.

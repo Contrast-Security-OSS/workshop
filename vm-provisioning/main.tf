@@ -85,7 +85,9 @@ resource "azurerm_network_interface" "workshopnic" {
   }
 
   tags = {
-    environment = "Terraform Demo"
+    environment = "Workshop"
+    CreatedBy = "Marco Morales"
+    Customer = var.customer
   }
 }
 
@@ -105,7 +107,7 @@ resource "azurerm_virtual_machine" "vm" {
   storage_image_reference {
     // Reference the image by ID directly
 //    id = data.azurerm_image.image.id
-    id = ""
+    id = var.image_id
   }
 
 
@@ -114,7 +116,6 @@ resource "azurerm_virtual_machine" "vm" {
     caching = "ReadWRite"
     create_option = "FromImage"
     managed_disk_type = "Premium_LRS"
-//    os_type = "Windows"
   }
 
   os_profile_windows_config {
