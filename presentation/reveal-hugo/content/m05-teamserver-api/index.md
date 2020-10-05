@@ -2,7 +2,6 @@
 title = "Module 5: Using the TeamServer REST API"
 chapter = true
 description = "The Contrast Security Workshop"
-weight = 10
 outputs = ["Reveal"]
 layout = "bundle"
 draft = false
@@ -25,8 +24,8 @@ transition = "zoom"
 [reveal_hugo.templates.warning]
 background = "#fa220a"
 transition = "zoom"
-
 +++
+
 {{% note %}}
 Instructors: you'll need to configure a few things for this workshop available in the GitHub repository.  Each section has a README to guide you.
 

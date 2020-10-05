@@ -1,5 +1,5 @@
 +++
-title = "Module 3: Building a DevOps Pipeline"
+title = "Module 4: Building a DevOps Pipeline"
 chapter = true
 description = "The Contrast Security Workshop"
 outputs = ["Reveal"]
