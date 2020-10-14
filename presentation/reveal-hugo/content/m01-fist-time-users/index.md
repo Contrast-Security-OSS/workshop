@@ -38,10 +38,10 @@ Instructors: you'll need to configure a few things for this workshop available i
 
 Jump to:
 - [Module Introduction](#/module-introduction)
-- [Introduction to TeamServer](#/introduction-to-teamserver)
 - [The WebGoat application](#/the-webgoat-application)
-- [LAB: Testing software](#/testing-software)
-- [LAB: Libraries](#/libraries)
+- [Introduction to TeamServer](#/introduction-to-teamserver)
+- [LAB: Testing software and SQLi](#/testing-software)
+- [LAB: Cross-Site-Scripting](#/cross-site-scripting)
 - [LAB: Contrast Protect](#/contrast-protect)
 - [Next Steps](#/next-steps)
 
@@ -70,7 +70,7 @@ This module should take about 60 minutes to complete.
 Be sure to have completed the [prerequisites](../#/setup-and-prerequisites)  
 
 ---
-
+{{< slide id="the-webgoat-application" >}}
 ### Sample application - WebGoat
 
 We'll start by deploying a vulnerable Java application named WebGoat.  This is a Java open-sourced example designed to helped explain common vulnerabilities as identified by the OWASP Foundation. 
@@ -124,7 +124,7 @@ yourname-java-webgoat-svc - http://52.149.201.3:18101/WebGoat
 
 Navigate to your supplied URL and log on as the WebGoat *guest* presented on the login page. 
 
-{{< figure src="14-webgoat-login.png" >}}
+{{< figure src="14-webgoat-login.png"  height="300px" text-align="center" >}}
 
 ---
 ### Webgoat Main Page
@@ -135,7 +135,7 @@ The home page of the Webgoat application shows you the following:
 
 Let's navigate through the headings to get to our different flaws.
 
-{{< figure src="14-webgoat-mainpage.png" height="400px" text-align="center">}}
+{{< figure src="14-webgoat-mainpage.png" height="300px" text-align="center">}}
 [See the full-sized picture](14-webgoat-mainpage.png)
 
 ---
@@ -157,7 +157,7 @@ In the subheadings on the left, expand the section entitled, "Injection Flaws."
 
 Once expanded, click on the "String SQL Injection" option in the list." 
 
-{{< figure src="14-webgoat-expand-injection.png" height="400px" text-align="center">}}
+{{< figure src="14-webgoat-expand-injection.png" height="300px" text-align="center">}}
 [See the full-sized picture](14-webgoat-expand-injection.png)
 
 ---
@@ -170,7 +170,7 @@ You will see a response indicating, `No results matched.  Try again.`
 
 This is a typical data-entry test.  Normal scanning and user testing do not reveal security vulnerabilities on this page, but Contrast Security will.  Let's examine the results from Contrast Security.
 
-{{< figure src="14-webgoat-name.png" height="400px" text-align="center">}}
+{{< figure src="14-webgoat-name.png" height="300px" text-align="center">}}
 [See the full-sized picture](14-webgoat-name.png)
 
 ---
@@ -220,7 +220,7 @@ The dashboard presents a summary about your deployed applications:
 - Current vulnerabilities, listed by severity
 - Current attacks
 
-{{< figure src="04-dashboard.png#center" height="400px" >}}
+{{< figure src="04-dashboard.png#center" height="300px" >}}
 [See the full-sized picture](04-dashboard.png)
 
 ---
@@ -231,7 +231,7 @@ As you and your teams onboard applications, their results will be added to Contr
 
 This screenshot is an example of a dashboard after a few hundred applications have been onboarded.
 
-{{< figure src="m1-dashboard.png" height="400px" >}}
+{{< figure src="m1-dashboard.png" height="300px" >}}
 [See the full-sized picture](m1-dashboard.png)
 
 ---
@@ -246,7 +246,7 @@ Click on the bell icon in the upper right-hand corner to see notifications alert
 
 We'll even see we have a new <b>CRITICAL</b> vulnerability we found from our earlier user-input test.
 
-{{< figure src="14-webgoat-injection-notification.png" height="400px" text-align="center">}}
+{{< figure src="14-webgoat-injection-notification.png" height="300px" text-align="center">}}
 [See the full-sized picture](14-webgoat-injection-notification.png)
 
 ---
@@ -265,8 +265,6 @@ Notifications are useful when first onboarding an application or first uncoverin
 At Contrast, we've learned that as teams shift more of their workload to ephemeral and cloud-based environments, automatic onboarding is a valuable time-saver.  This automatic registration lets teams automatically opt into a security model.
 
 As you and your teams exercise more of your software, we'll keep track of new vulnerabilities as soon as they are discovered.  There is high value to all members of your team when you can leverage this information with minimal configuration.
-
-{{< figure src="14-webgoat-injection-notification.png" height="400px" text-align="center">}}
 
 ---
 ### Applications
@@ -288,7 +286,7 @@ In this example, we entered the name `webgoat` to filter for those applications.
 Find your application by using your name as filter, and click into your webgoat application.
 
 
-{{< figure src="03-applications.png" >}}
+{{< figure src="03-applications.png" height="300px">}}
 [See the full-sized picture](03-applications.png)
 
 ---
@@ -321,7 +319,7 @@ Your WeGoat application dashboard features quite a bit of information to help yo
 
 Your instructor may highlight other aspects of this page. 
 
-{{< figure src="09-webgoat-dashboard.png" height="500px" >}}
+{{< figure src="09-webgoat-dashboard.png" height="300px" >}}
 [See the full-sized picture](09-webgoat-dashboard.png)
 
 ---
@@ -330,14 +328,14 @@ This vulnerabilities page shows what Contrast Security has discovered in your ap
 
 [Skip to Critical SQLi Vulneratiblity.](#/critical-vulnerability)
 
-{{< figure src="09-webgoat-vulnerabilities.png" height="500px"
+{{< figure src="09-webgoat-vulnerabilities.png" height="300px"
 caption="[See the full-sized picture](09-webgoat-vulnerabilities.png)"
 >}}
 
 ---
 ### The Attacks Page
 Contrast Security shows the attacks on your system.  At the onset, we don't yet have attacks but we'll add some later in this module.
-{{< figure src="09-webgoat-attacks-none.png"  height="500px"
+{{< figure src="09-webgoat-attacks-none.png"  height="300px"
 caption="[See the full-sized picture](09-webgoat-attacks-none.png)"
 >}}
 
@@ -347,7 +345,7 @@ Contrast Security shows the different libraries included in your application, pl
   
 When your teams see actual use, they can focus on libraries with greatest impact.
  
-{{< figure src="09-webgoat-libraries.png" height="500px"
+{{< figure src="09-webgoat-libraries.png" height="300px"
 caption="[See the full-sized picture](09-webgoat-libraries.png)"
 >}}
 
@@ -363,7 +361,7 @@ caption="[See the full-sized picture](09-webgoat-route-coverage.png)"
 ### The Policy Page
 Contrast Security gives your team fine-grained control over the rules and the outcomes Contrast Security applies to your application.
 
-{{< figure src="09-webgoat-policy.png" height="500px"
+{{< figure src="09-webgoat-policy.png" height="300px"
 caption="[See the full-sized picture](09-webgoat-policy.png)"
 >}}
 
@@ -375,7 +373,7 @@ Clicking into the Critical vulnerability gives you an overview page summarizing 
 
 This example showcases one of the many strengths of Contrast Security.  The ordinary test of entering a last name reveals a real vulnerability within the code.
 
-{{< figure src="09-webgoat-sql-injection-overview.png"  height="500px"
+{{< figure src="09-webgoat-sql-injection-overview.png" height="300px"
 caption="[See the full-sized picture](09-webgoat-sql-injection-overview.png)"
 >}}
 
@@ -396,7 +394,7 @@ Let's go back to the Application Vulnerabilities page
 
 The details page provides a clear narrative about the vulnerability, and highlights the path the request into the application code.
 
-{{< figure src="09-webgoat-sql-injection-details.png"    height="500px"
+{{< figure src="09-webgoat-sql-injection-details.png"    height="300px"
 caption="[See the full-sized picture](09-webgoat-sql-injection-details.png)">}}
 
 ---
@@ -405,7 +403,7 @@ Next, click into the "HTTP Info subpage" to see HTTP details of the operation, a
 
 Your instructor will work through the details on this page and help explain how this information helps a brand-new users of Contrast Security quickly identify vulnerabilities in their software and how to fix it.
 
-{{< figure src="09-webgoat-sql-injection-http-info.png"   height="500px"
+{{< figure src="09-webgoat-sql-injection-http-info.png"   height="300px"
 caption="[See the full-sized picture](09-webgoat-sql-injection-http-info.png)" >}}
 
 ---
@@ -413,7 +411,7 @@ caption="[See the full-sized picture](09-webgoat-sql-injection-http-info.png)" >
 
 After identifying the vulnerability, Contrast Security also explains how you can fix it.  In addition to a reference implementation, we also offer links to external sources further explaining the vulnerability.  This is our way of ensuring you have the best information available to address software vulnerabilities.
 
-{{< figure src="09-webgoat-sql-injection-howto-fix.png"   height="500px"
+{{< figure src="09-webgoat-sql-injection-howto-fix.png"   height="300px"
 caption="[See the full-sized picture](09-webgoat-sql-injection-howto-fix.png)" >}}
 
 ---
@@ -422,6 +420,7 @@ caption="[See the full-sized picture](09-webgoat-sql-injection-howto-fix.png)" >
 You are encouraged to explore the subsection for SQL Injection to see the materials, the problems, and the solutions to this common Web Application Security Flaw.
 
 ---
+{{< slide id="cross-site-scripting" >}}
 ## Cross-Site Scripting (XSS)
 {{% note %}}
 Explain XSS to new users and then show the process.
@@ -440,7 +439,7 @@ In the subheadings on the left, expand the section entitled, "Cross-Site Scripti
 
 Once expanded, click on the "LAB: Cross Site Scripting" option in the list. 
 
-{{< figure src="16-webgoat-xss-navigate.png" height="400px" text-align="center">}}
+{{< figure src="16-webgoat-xss-navigate.png" height="300px" text-align="center">}}
 [See the full-sized picture](16-webgoat-xss-navigate.png)
 
 ---
@@ -453,21 +452,21 @@ The flaw is that our query is vulnerable to a cross-site scripting attack.
 
 On this page, Login as "Tom Cat" and use the password, "tom" as directed.
 
-{{< figure src="16-webgoat-xss-mainpage.png" height="400px" text-align="center">}}
+{{< figure src="16-webgoat-xss-mainpage.png" height="300px" text-align="center">}}
 [See the full-sized picture](16-webgoat-xss-mainpage.png)
 
 ---
 ### WebGoat: Expose a XSS Vulnerability - Part 2
 In the next screen, click on the "SearchStaff" button to initiate a search screen.
 
-{{< figure src="16-webgoat-xss-searchstaff.png" height="400px" text-align="center">}}
+{{< figure src="16-webgoat-xss-searchstaff.png" height="300px" text-align="center">}}
 [See the full-sized picture](16-webgoat-xss-searchstaff.png)
 
 ---
 ### WebGoat: Expose a XSS Vulnerability - Part 3
 On the "Search for User" page, enter the name "Jerry" and then click on the "FindProfile" button.
 
-{{< figure src="16-webgoat-xss-findprofile.png" height="400px" text-align="center">}}
+{{< figure src="16-webgoat-xss-findprofile.png" height="300px" text-align="center">}}
 [See the full-sized picture](16-webgoat-xss-findprofile.png)
 
 ---
@@ -476,7 +475,7 @@ The results will show the details for the user "Jerry" as an ordinary screen.  H
 
 Let's look at the results in TeamServer.
 
-{{< figure src="16-webgoat-xss-findprofile-results.png" height="400px" text-align="center">}}
+{{< figure src="16-webgoat-xss-findprofile-results.png" height="300px" text-align="center">}}
 [See the full-sized picture](16-webgoat-xss-findprofile-results.png)
 
 ---
@@ -496,7 +495,7 @@ You should see a new notification indicating your application has a new High vul
 
 Alternatively, you can navigate from the Applications and follow links to find this new vulnerability with a name similar to "Cross-Site Scripting from "search_name" Parameter on "/WebGoat/attack" page."
 
-{{< figure src="16-webgoat-xss-notifications.png" height="400px" text-align="center">}}
+{{< figure src="16-webgoat-xss-notifications.png" height="300px" text-align="center">}}
  
 ---
 ### TeamServer: XSS Vulnerability Details
@@ -504,9 +503,8 @@ The overview page summarizes the XSS vulnerability similarly to the previous SQL
 
 Again, you can see the highlighted input data to help your team more quickly diagnose and troubleshoot vulnerabilities.
 
-{{< figure src="16-webgoat-xss-overview.png"  height="500px"
-caption="[See the full-sized picture](16-webgoat-xss-overview.png)"
->}}
+{{< figure src="16-webgoat-xss-overview.png"  height="300px">}}
+[See the full-sized picture](16-webgoat-xss-overview.png)
 
 ---
 ### Additional Vulnerability Details
@@ -544,7 +542,7 @@ In the subheadings on the left, expand the section entitled, "Access Control Fla
 
 Once expanded, click on the "Bypass a Path Based Access Control Scheme." 
 
-{{< figure src="17-webgoat-path-navigate.png" height="400px" text-align="center">}}
+{{< figure src="17-webgoat-path-navigate.png" height="300px" text-align="center">}}
 [See the full-sized picture](17-webgoat-path-navigate.png)
 
 ---
@@ -557,7 +555,7 @@ The flaw is that our lookup is vulnerable to an attack where you can access othe
 
 On this page, click on the first entry named, "SameOriginPolicyProtection.html" and press the "View File" button.
 
-{{< figure src="17-webgoat-path-mainpage.png" height="400px" text-align="center">}}
+{{< figure src="17-webgoat-path-mainpage.png" height="300px" text-align="center">}}
 [See the full-sized picture](17-webgoat-path-mainpage.png)
 
 ---
@@ -567,7 +565,7 @@ When you press "View File", you will see the contents of the file you selected b
 
 You can click on other filenames to see their contents.
 
-{{< figure src="17-webgoat-path-results.png" height="400px" text-align="center">}}
+{{< figure src="17-webgoat-path-results.png" height="300px" text-align="center">}}
 [See the full-sized picture](17-webgoat-path-results.png)
 
 Let's examine the results in TeamServer.
@@ -597,7 +595,7 @@ The overview page summarizes the Path Traversal vulnerability similarly to previ
  
 Again, you can see the highlighted input data to help your team more quickly diagnose and troubleshoot vulnerabilities.
 
-{{< figure src="17-webgoat-path-overview.png"  height="500px"
+{{< figure src="17-webgoat-path-overview.png"  height="300px"
 caption="[See the full-sized picture](17-webgoat-path-overview.png)"
 >}}
 
@@ -607,7 +605,7 @@ The overview page summarizes the Path Traversal vulnerability similarly to previ
  
 The essential detail on this page is the line about "Untrusted data used to open file" showing how the file reference is passed along to a file operation.  The flaw is created by the concatenations in the previous lines and shown here.
 
-{{< figure src="17-webgoat-path-details.png"  height="500px"
+{{< figure src="17-webgoat-path-details.png"  height="300px"
 caption="[See the full-sized picture](17-webgoat-path-details.png)"
 >}}
 
@@ -659,14 +657,14 @@ In the subheadings on the left, expand the section entitled, "Injection Flaws."
 
 Once expanded, click on the "String SQL Injection" option in the list." 
 
-{{< figure src="14-webgoat-expand-injection.png" height="400px" text-align="center">}}
+{{< figure src="14-webgoat-expand-injection.png" height="300px" text-align="center">}}
 [See the full-sized picture](14-webgoat-expand-injection.png)
 
 ---
 ### Enter attack data
 In the box to enter your last name, enter the SQL Injection text and press the "Go!" button.
 
-```text
+```
 Erwin' or '1'='1
 ```
 
@@ -674,7 +672,7 @@ The application will announce you correctly performed a SQL Injection because th
 
 Let's review in the next screens.
 
-{{< figure src="14-webgoat-sql-injection.png" height="500px"
+{{< figure src="14-webgoat-sql-injection.png" height="300px"
 caption="[See the full-sized picture](14-webgoat-sql-injection.png)"
 >}}
 
@@ -687,19 +685,21 @@ You should see a new notification indicating your application is under attack an
 
 Let's investigate thie exploit and see how we can protect ourselves using Contrast Security.
 
-{{< figure src="20-webgoat-injection-notification.png" height="400px" text-align="center">}}
+{{< figure src="20-webgoat-injection-notification.png" height="300px" text-align="center">}}
+[See the full-sized picture](20-webgoat-injection-notification.png)
  
 ---
 ### TeamServer: Sql Injection Attack - Overview
 
 Your application Overview may have new details for libraries or routes.  Let's click into the "Attacks" subheading to see details for this attack.
 
-{{< figure src="20-webgoat-injection-attack-overview.png" height="400px" text-align="center">}}
+{{< figure src="20-webgoat-injection-attack-overview.png" height="300px" text-align="center">}}
+[See the full-sized picture](20-webgoat-injection-attack-overview.png)
  
 ---
 ### TeamServer: Attacks
 
-Contrast Security will alert you to the exploit and give you mitigation options.  But first, review the screen to see these details:
+Contrast Security will alert you to the exploit and give you mitigation options.  First, review the screen to see:
 
 - The source IP
 - The existing status, currently "Exploited"
@@ -708,18 +708,13 @@ Contrast Security will alert you to the exploit and give you mitigation options.
 - The severity
 - Protection options
 
-We will examine Protection options.
-
-{{< figure src="20-webgoat-injection-attack-attacks.png" >}}
+{{< figure src="20-webgoat-injection-attack-attacks.png" height="300px">}}
+[See the full-sized picture](20-webgoat-injection-attack-attacks.png)
 
 ---
 ### TeamServer Protection Options
 
 The Protection options are identified by icons as shown in this picture
-
-{{< figure src="20-webgoat-injection-attack-protection.png" >}}
-
-and the are:
 
 - Configure App Protection Rule
 - Add Virtual Patch
@@ -727,6 +722,7 @@ and the are:
 
 We'll review each.
 
+{{< figure src="20-webgoat-injection-attack-protection.png" >}}
 
 ---
 ### TeamServer Policies
@@ -743,7 +739,7 @@ Contrast Security provides policies for different vulnerabilities you can set fo
 
 The image below has some filtering enabled so we can focus on SQL Injection.  The workshop default is to monitor SQL Injection.
 
-{{< figure src="20-webgoat-injection-protect-configure.png" >}}
+{{< figure src="20-webgoat-injection-protect-configure.png" height="300px">}}
 
 We'll reconfigure the option next.
 
@@ -754,7 +750,7 @@ You should notice the SQL Injection policy is to MONITOR in the development envi
 
 Clck on the Monitor option and change it setting from "Monitor" to "Block."
 
-{{< figure src="20-webgoat-injection-protect-block.png" >}}
+{{< figure src="20-webgoat-injection-protect-block.png" height="300px">}}
 
 ---
 ### Re-try SQL Exploit
@@ -765,7 +761,7 @@ In the subheadings on the left, expand the section entitled, "Injection Flaws."
 
 Once expanded, click on the "String SQL Injection" option in the list." 
 
-{{< figure src="14-webgoat-expand-injection.png" height="400px" text-align="center">}}
+{{< figure src="14-webgoat-expand-injection.png" height="300px" >}}
 [See the full-sized picture](14-webgoat-expand-injection.png)
 
 ---
@@ -779,11 +775,11 @@ Click on the "Restart Lesson" button to reset the page.
 ### Re-enter an exploit
 Let's retry the SQL Injection again with a new value and press the "Go!" button.
 
-```text
+```commandline
 Smith' or '1'='1
 ```
 
-{{< figure src="20-webgoat-injection-retry.png" height="400px" text-align="center">}}
+{{< figure src="20-webgoat-injection-retry.png" height="300px" text-align="center">}}
 [See the full-sized picture](20-webgoat-injection-retry.png)
 
 ---
@@ -810,7 +806,7 @@ You have options to match by name, language, agent, and other factors
 
 See more information at: https://docs.contrastsecurity.com/en/virtual-patches.html 
 
-{{< figure src="20-webgoat-protect-virtual-patch.png" height="400px" text-align="center">}}
+{{< figure src="20-webgoat-protect-virtual-patch.png" height="300px" text-align="center">}}
 [See the full-sized picture](20-webgoat-protect-virtual-patch.png)
 
 ---
@@ -820,7 +816,7 @@ Alternatively, you can choose to block (or allow) specific IP addresses.  This i
 
 See more information at: https://docs.contrastsecurity.com/en/block-or-allow-ips.html
 
-{{< figure src="20-webgoat-protect-ip-blacklist.png" height="400px" text-align="center">}}
+{{< figure src="20-webgoat-protect-ip-blacklist.png" height="300px" text-align="center">}}
 [See the full-sized picture](20-webgoat-protect-ip-blacklist.png)
 
 ---
