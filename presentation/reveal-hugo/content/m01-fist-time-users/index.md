@@ -40,7 +40,7 @@ Jump to:
 - [Module Introduction](#/module-introduction)
 - [Introduction to TeamServer](#/introduction-to-teamserver)
 - [The WebGoat application](#/the-webgoat-application)
-- [LAB: Exploiting software](#/exploiting-software)
+- [LAB: Testing software](#/testing-software)
 - [LAB: Libraries](#/libraries)
 - [LAB: Contrast Protect](#/contrast-protect)
 - [Next Steps](#/next-steps)
@@ -88,16 +88,99 @@ In later modules, we'll walk you through the process of instrumenting an applica
 ### Deploying your application
 This workshop is designed to have you deploy an application so you can see its data added as part of an onboarding lifecycle.
 
-Your instructor already deployed applications configured with your TeamServer credentials.  You will receive the connection details for your applications as a URLs for each vulnerable application.
+Your instructor deployed applications configured with your TeamServer credentials and will supply connection details for your applications as a URLs for each vulnerable application.
+
+---
+### Webgoat Overview
+{{% note %}}
+For many users, collecting data as we use the application is a brand-new concept.  Most users are familiar with static code analysis and its outcomes, fewer have been exposed to the more modern approach of IAST.
+{{% /note %}}
+
+Contrast Security collects information as soon as you run your registered application.  The more you exercise the application with manual or automated tests, the more data we'll report.
+
+You will see evidence of this data collection as you use your application that reveals exploits *even though you weren't testing for those cases.*
+
+---
+{{< slide id="testing-software" >}}
+## LAB: Testing software
+
+In this section, we will reveal a common application security flaw known as a SQL Injection with simple user testing.
+
+We'll provide a brief overview, show it WebGoat, and then highlight the results in TeamServer.
+
+--- 
+### Navigate to the application
+{{% note %}}
+Explain the nature of the WebGoat application, and some of the navigation options.
+
+Logging in as guest or admin are acceptable, but we'll go with guest for this exercise. 
+{{% /note %}}
+
+Your instructor gave you application details in this format:
+
+```
+yourname-java-webgoat-svc - http://52.149.201.3:18101/WebGoat
+```
+
+Navigate to your supplied URL and log on as the WebGoat *guest* presented on the login page. 
+
+{{< figure src="14-webgoat-login.png" >}}
+
+---
+### Webgoat Main Page
+
+The home page of the Webgoat application shows you the following:
+- Main topics on the left
+- Content in the middle
+
+Let's navigate through the headings to get to our different flaws.
+
+{{< figure src="14-webgoat-mainpage.png" height="400px" text-align="center">}}
+[See the full-sized picture](14-webgoat-mainpage.png)
+
+---
+## SQL Injection
+{{% note %}}
+Explain SQL Injection to new users and then show the process.
+{{% /note %}}
+
+SQL Injections are a flaw that allow an attacker to send extra, untrusted data to a query.  The result is an attacker can run unintended extra commands.
+
+Injections are the #1 Web Application Security Risk in the OWASP Top-Ten.
+
+*see https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A1-Injection*
+
+---
+### Navigating to SQL Injections
+
+In the subheadings on the left, expand the section entitled, "Injection Flaws."
+
+Once expanded, click on the "String SQL Injection" option in the list." 
+
+{{< figure src="14-webgoat-expand-injection.png" height="400px" text-align="center">}}
+[See the full-sized picture](14-webgoat-expand-injection.png)
+
+---
+### WebGoat: Expose a SQL Injection Vulnerability
+The *String SQL Injection* page is an example of the content in WebGoat.  Their content provides instructions, data-entry exercises, and usually a challenge.  Some challenges include hints and solutions.
+
+Enter your name in the text field (or `Smith`) and press the `Go!` button.
+
+You will see a response indicating, `No results matched.  Try again.`
+
+This is a typical data-entry test.  Normal scanning and user testing do not reveal security vulnerabilities on this page, but Contrast Security will.  Let's examine the results from Contrast Security.
+
+{{< figure src="14-webgoat-name.png" height="400px" text-align="center">}}
+[See the full-sized picture](14-webgoat-name.png)
 
 ---
 ### What happens when you deploy an application?
 When you deploy your instrumented application, a few things happen:
-- The agent connects with the remote TeamServer
+- The agent connects with the Contrast Server (TeamServer)
 - The agent starts sending data for the application
 - If licenses are available, details for the application are visible in TeamServer
 
-In the next section, we'll look at working with the Contrast Security User Interface running on TeamServer.
+Next, we'll look at the Contrast Security User Interface running on TeamServer.
 
 ---
 {{< slide id="introduction-to-teamserver" >}}
@@ -116,45 +199,34 @@ The dashboard is a landing page for all Contrast Security users - developers, op
 {{% /note %}}
 
 ### Log on to TeamServer
+{{% note %}}
+Instructor: You may have to allocate licenses to users.
+
+This section examines the details for a single exploit.
+Explain how the look-and-feel is consistent, and the information is designed to help the developer quickly identify the vulnerability with the specific data supplied to the application.
+
+The Details page shows the path of our vulnerability.  This is an improvement beyond the URL, because Contrast also shows how the vulnerability affects running code.  
+{{% /note %}}
 Start by logging onto the Contrast Security UI at https://eval.contrastsecurity.com with the username and password your instructor supplied to you.
 
-We'll use the default landing page's dashboard as the starting point for this module's exercise.
-
-Your instructor will provide an overview of the TeamServer.  
-
-{{< figure src="../images/04-dashboard.png#center" height="400px" text-align="center">}}
-[See the full-sized picture](../images/04-dashboard.png)
-
----
-{{% note %}}
-In this slide, we should have already setup each user with their running applications so data has been sent to TeamServer.
-
-The time saved by automatically onboarding and offboarding applications is substantial.  No more complex rules, setup, or configuration.
-{{% /note %}}
-
-### TeamServer Notification
-At the start of this workshop, your instructor deployed vulnerable applications for you.
-
-Click on the bell icon in the upper right-hand corner to see notifications alerting us to the automatic onboarding of your new appplications and their servers.
-
-{{< figure src="01-notifications-new-applications.png" height="400px" >}}
-[See the full-sized picture](01-notifications-new-applications.png)
-
-At Contrast, we've learned that as team shift more of their workload to ephemeral and cloud-based environments, automatic onboarding is a big time-saver.  This automatic registration lets teams automatically opt into a security model.
+{{< figure src="04-teamserver-login.png#center" height="400px" text-align="center">}}
+[See the full-sized picture](04-teamserver-login.png)
 
 ---
 ### TeamServer Dashboard
-Back to the main dashboard, you should see a summary about your deployed applications:
+The dashboard presents a summary about your deployed applications:
 - Number of Applications, Libraries and Servers
 - Average time to remediate vulnerabilties
 - Current vulnerabilities, listed by severity
 - Current attacks
 
-{{< figure src="../images/04-dashboard.png#center" height="400px" >}}
-[See the full-sized picture](../images/04-dashboard.png)
+{{< figure src="04-dashboard.png#center" height="400px" >}}
+[See the full-sized picture](04-dashboard.png)
 
 ---
 ### Real-Time Visibility
+The dashboard is designed to give you a fast understanding of your organization's applications, with links you would use to better understand the details.
+
 As you and your teams onboard applications, their results will be added to Contrast Security for better visibility into the state of your application development in real time.
 
 This screenshot is an example of a dashboard after a few hundred applications have been onboarded.
@@ -162,21 +234,62 @@ This screenshot is an example of a dashboard after a few hundred applications ha
 {{< figure src="m1-dashboard.png" height="400px" >}}
 [See the full-sized picture](m1-dashboard.png)
 
-We'll other pages in TeamServer after we run your sample application. 
+---
+### TeamServer Notification
+{{% note %}}
+In this slide, we should have already setup each user with their running applications so data has been sent to TeamServer.
 
+The time saved by automatically onboarding and offboarding applications is substantial.  No more complex rules, setup, or configuration.
+{{% /note %}}
+
+Click on the bell icon in the upper right-hand corner to see notifications alerting us to the automatic onboarding of your new appplications and their servers.
+
+We'll even see we have a new <b>CRITICAL</b> vulnerability we found from our earlier user-input test.
+
+{{< figure src="14-webgoat-injection-notification.png" height="400px" text-align="center">}}
+[See the full-sized picture](14-webgoat-injection-notification.png)
 
 ---
-### Ongoing Data Collection
-From the onset, you accumulate results in TeamServer.  Your team's day-to-day exercising and testing automatically generates meaningful results of security vulnerabilities.  
+### TeamServer: Critical Notification
+{{% note %}}
+Instructor: You may have to allocate licenses to users.
 
-As you and your teams exercise more of your software, we'll keep track of new vulnerabilities and their remediation as soon as it is exercised.
+This section examines the details for a single exploit.
+Explain how the look-and-feel is consistent, and the information is designed to help the developer quickly identify the vulnerability with the specific data supplied to the application.
 
-There is high value to all members of your team when you can leverage this information with minimal configuration.
+The Details page shows the path of our vulnerability.  This is an improvement beyond the URL, because Contrast also shows how the vulnerability affects running code.  
+{{% /note %}}
 
-Click into the *Application* heading to see how TeamServer uncovers new vulnerabilities.
+Notifications are useful when first onboarding an application or first uncovering a vulnerability.
+
+At Contrast, we've learned that as teams shift more of their workload to ephemeral and cloud-based environments, automatic onboarding is a valuable time-saver.  This automatic registration lets teams automatically opt into a security model.
+
+As you and your teams exercise more of your software, we'll keep track of new vulnerabilities as soon as they are discovered.  There is high value to all members of your team when you can leverage this information with minimal configuration.
+
+{{< figure src="14-webgoat-injection-notification.png" height="400px" text-align="center">}}
+
+---
+### Applications
+
+Everyday Contrast users will go straight to the critical vulnerability from the notification page.  We will navigate through Applications to see more about Contrast Security.
+
+Click into the *Applications* heading to see the applications in your organization.
 
 {{< figure src="04-dashboard-command-bar-applications.png" >}}
 [See the full-sized picture](04-dashboard-command-bar-applications.png)
+
+---
+### Applications list
+
+The applications page shows all of your applications, organized to let see information quickly and easily.  You can filter or search to narrow down your list by name, tags, language, and other attributes.
+
+In this example, we entered the name `webgoat` to filter for those applications.
+
+Find your application by using your name as filter, and click into your webgoat application.
+
+
+{{< figure src="03-applications.png" >}}
+[See the full-sized picture](03-applications.png)
 
 ---
 {{< slide template="note" >}}
@@ -204,15 +317,19 @@ Keep an eye on the name of your running instance of Webgoat as identified in you
 For many users, collecting data as we use the application is a brand-new concept.  Most users are familiar with static code analysis and its outcomes, fewer have been exposed to the more modern approach of IAST.
 {{% /note %}}
 
-As soon as you run your registered application, Contrast Security will collect information.  The more you exercise the application with manual or automated tests, the more data we'll report.
+Your WeGoat application dashboard features quite a bit of information to help you understand its state.  Here, we'll focus on the critical Vulnerability.
 
-{{< figure src="09-webgoat-overview.png" height="500px" >}}
-[See the full-sized picture](09-webgoat-overview.png)
+Your instructor may highlight other aspects of this page. 
+
+{{< figure src="09-webgoat-dashboard.png" height="500px" >}}
+[See the full-sized picture](09-webgoat-dashboard.png)
 
 ---
 ### The Vulnerabilities Page
 This vulnerabilities page shows what Contrast Security has discovered in your application, organized to help you easily find the information you want.
- 
+
+[Skip to Critical SQLi Vulneratiblity.](#/critical-vulnerability)
+
 {{< figure src="09-webgoat-vulnerabilities.png" height="500px"
 caption="[See the full-sized picture](09-webgoat-vulnerabilities.png)"
 >}}
@@ -251,112 +368,16 @@ caption="[See the full-sized picture](09-webgoat-policy.png)"
 >}}
 
 ---
-{{< slide id="exploiting-software" >}}
-## LAB: Exploiting software
+{{< slide id="critical-vulnerability" >}}
 
-In this section, we'll work through three common application security flaws in the WebGoat application.
-
-We'll provide a brief overview of each flaw, show it WebGoat, and then highlight the results in TeamServer.
-
----
-## SQL Injection
-{{% note %}}
-Explain SQL Injection to new users and then show the process.
-{{% /note %}}
-
-SQL Injections are a flaw that allow an attacker to send extra, untrusted data to a query.  The result is an attacker can run unintended extra commands.
-
-Injections are the #1 Web Application Security Risk in the OWASP Top-Ten.
-
-*see https://owasp.org/www-project-top-ten/OWASP_Top_Ten_2017/Top_10-2017_A1-Injection*
-
---- 
-### Navigate to the application
-{{% note %}}
-Explain the nature of the WebGoat application, and some of the navigation options.
-
-Logging in as guest or admin are acceptable, but we'll go with guest for this exercise. 
-{{% /note %}}
-
-Your instructor gave you application details in this format:
-
-```text
-yourname-java-webgoat-svc - http://52.149.201.3:18101/WebGoat
-```
-
-Navigate to your supplied URL and log on as the WebGoat *guest* presented on the login page. 
-
-{{< figure src="14-webgoat-login.png" >}}
-
----
-### Webgoat Main Page
-
-The home page of the Webgoat application shows you the following:
-- Main topics on the left
-- Content in the middle
-
-We're going to navigate to subheadings to examine the different flaws.
-
-{{< figure src="14-webgoat-mainpage.png" height="400px" text-align="center">}}
-[See the full-sized picture](14-webgoat-mainpage.png)
-
----
-### Navigating to SQL Injections
-
-In the subheadings on the left, expand the section entitled, "Injection Flaws."
-
-Once expanded, click on the "String SQL Injection" option in the list." 
-
-{{< figure src="14-webgoat-expand-injection.png" height="400px" text-align="center">}}
-[See the full-sized picture](14-webgoat-expand-injection.png)
-
----
-### WebGoat: Expose a SQL Injection Vulnerability
-The *String SQL Injection* page is an example of the content in WebGoat with instruction, data-entry, and sometimes a challenge.  Some challenges include hints and solutions.
-
-Enter your name in the text field (or the name "Smith").
-
-You will see a response indicating, "No results matched."
-
-This is typical data-entry and not intended as a test for exploits.  Normal scanning and user testing usually doesn't reveal there is a security vulnerability on this page.  
-
-Let's examine the results from Contrast Security.
-
-{{< figure src="wg_1.png" height="400px" text-align="center">}}
-[See the full-sized picture](wg_1.png)
-
----
-### TeamServer: SQL Injection Overview
-{{% note %}}
-Instructor: You may have to allocate licenses to users.
-
-This section examines the details for a single exploit.
-Explain how the look-and-feel is consistent, and the information is designed to help the developer quickly identify the vulnerability with the specific data supplied to the application.
-
-The Details page shows the path of our vulnerability.  This is an improvement beyond the URL, because Contrast also shows how the vulnerability affects running code.  
-{{% /note %}}
-
-Navigate to Teamserver (https://eval.contrastsecurity.com/Contrast) with the credentials supplied to you.
-
-You should see a new notification indicating your application has a new *Critical* vulnerability.  
-
-{{< figure src="14-webgoat-injection-notification.png" height="400px" text-align="center">}}
-
-This first-time type of notification is useful when first onboarding an application or first uncovering a vulnerability.
-
-Click on "Critical vulnerability" to navigate directly to the newly found vulnerability.
-
-Alternatively, click on the name of the application and navigate to the subheading "Vulnerabilities" and then into the newly discovered Critical Vulnerability.
- 
----
-### TeamServer: Vulnerability Details
+### TeamServer: Critical Vulnerability Details
 Clicking into the Critical vulnerability gives you an overview page summarizing the vulnerability with the name, and details on how it was detected.  This is good context for teams when they review. 
+
+This example showcases one of the many strengths of Contrast Security.  The ordinary test of entering a last name reveals a real vulnerability within the code.
 
 {{< figure src="09-webgoat-sql-injection-overview.png"  height="500px"
 caption="[See the full-sized picture](09-webgoat-sql-injection-overview.png)"
 >}}
-
-This example showcases one of the many strengths of Contrast Security.  The ordinary operation of entering a last name reveals to the tester there is a real vulnerability within the code.
 
 ---
 ### Additional Vulnerability Details
@@ -367,6 +388,8 @@ Next, let's review the details for these sections:
 - How to Fix
 - Notes
 - Discussion
+
+Let's go back to the Application Vulnerabilities page
 
 ---
 ### TeamServer: Vulnerability Details

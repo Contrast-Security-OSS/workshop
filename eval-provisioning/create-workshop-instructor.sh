@@ -104,8 +104,8 @@ while true; do
 done
 
 #Delete the previous results
-rm $OUTPUT_FILE
 touch $OUTPUT_FILE
+rm $OUTPUT_FILE
 
 #Call the API to create the orgs
 echo "Calling the API"
@@ -136,6 +136,8 @@ do
             \"telemetry_enabled\": true,
             \"protection_enabled\": true
         }"
+
+        echo $json
 
         output=$(curl -s --location --request POST "$CONTRAST_URL/api/ng/superadmin/organizations/rasp?expand=skip_links" \
             --header "API-Key: $CONTRAST_SE_API_KEY" \
