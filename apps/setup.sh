@@ -185,7 +185,7 @@ fi
 
 if [ -z "$CONTRAST__API__URL" ];
 then
-  if [ -z "$CONTRAST__API__URL" ]
+  if [ -z "$C_CONTRAST__API__URL" ]
   then
     echo "\$CONTRAST__API__URL is not defined"
     exit_error
@@ -196,7 +196,7 @@ fi
 
 if [ -z "$CONTRAST__API__USER_NAME" ];
 then
-  if [ -z "$CONTRAST__API__USER_NAME" ]
+  if [ -z "$C_CONTRAST__API__USER_NAME" ]
   then
     echo "\$CONTRAST__API__USER_NAME is not defined"
     exit_error
