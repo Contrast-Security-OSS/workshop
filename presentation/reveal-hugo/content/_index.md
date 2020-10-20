@@ -7,7 +7,7 @@ layout = "slidelist"
 outputs = ["Reveal"]
 
 [logo]
-src = "images/contrast-security-logo.png"
+src = "images/contrast-security-gray-logo.png"
 alt = "Contrast Security"
 [reveal_hugo.templates.note]
 background = "#32a852"
