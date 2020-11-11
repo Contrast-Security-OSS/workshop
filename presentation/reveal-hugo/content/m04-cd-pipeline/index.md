@@ -335,9 +335,7 @@ We will expose our first vulnerability when we run the pipeline and its automate
 
 The result is a failure in Jenkins.
 
-`TODO: Show a Jenkins screenshot with the build failure`
-
-Next, let's look at TeamServer
+{{< figure src="05-jenkins-dev-build-failure.png" style="border: 1px solid #000;">}}
 
 ---
 ### Jenkins output
@@ -357,6 +355,9 @@ Trace Uuid: 6DZK-HPTB-UAXJ-YAJP
 Trace Severity: Critical
 Trace Likelihood: High
 ```
+
+Next, let's look at TeamServer
+
 ---
 ### TeamServer Vulnerability #1
 
