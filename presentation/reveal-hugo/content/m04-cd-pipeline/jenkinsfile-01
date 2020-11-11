@@ -1,0 +1,101 @@
+pipeline {
+    agent {
+        docker { image 'maven:3.6.3-jdk-8' }
+    }
+    stages {
+        stage("DEV") {
+            steps {
+                sh 'echo "DEV"'
+                sh 'echo "checkout"'
+//                ### TODO INSERT clone operation on next line
+                git branch: '1.5.4-SQLi', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
+                sh 'echo "unit test"'
+                sh '''
+                echo "$PATH"
+                echo "M2_HOME"
+                mvn --version
+                java -version
+                '''
+//                  ### TODO INSERT credentials block on next line
+                script {
+                    withCredentials([file(credentialsId: 'contrast_security-potato-ip', variable: 'yaml')]) {
+                        def contents = readFile(env.yaml)
+                        writeFile file: 'contrast_security.yaml', text: "$contents"
+                    }
+                    sh 'cat contrast_security.yaml'
+                }
+
+//                  ### TODO use the contents of the YAML file below.
+                script {
+                    // We're usinmg https://plugins.jenkins.io/build-user-vars-plugin/
+                    wrap($class: 'BuildUser') {
+//                        def yaml = readYaml file: 'contrast_security.yaml'
+//                        echo "api_key ${yaml.api.api_key}"
+//                        echo "username ${yaml.api.user_name}"
+//                        echo "apiUrl ${yaml.api.url}"
+//                        echo "service key ${yaml.api.service_key}"
+//                        echo "org UUID ${params.orguuid}"
+                        sh 'echo "build"'
+                        echo "firstname ${BUILD_USER_FIRST_NAME}"
+                        echo "lastname ${BUILD_USER_LAST_NAME}"
+                        echo "user ${BUILD_USER}"
+                        echo "email ${BUILD_USER_EMAIL}"
+//                        sh """
+//                        ### TODO INSERT EXPORT commands on next lines
+//                        export CONTRAST__API__URL="${yaml.api.url}"
+//                        export CONTRAST__API__API_KEY="${yaml.api.api_key}"
+//                        export CONTRAST__API__SERVICE_KEY="${yaml.api.service_key}"
+//                        export CONTRAST__API__USER_NAME="${yaml.api.user_name}"
+//                        env
+//                        mvn --version
+//                        ### TODO INSERT maven commands on next line
+//                        echo mvn -P contrast-maven  -Dcontrast-login-username="${BUILD_USER_EMAIL}" -Dcontrast-apiKey=${yaml.api.api_key} -Dcontrast-serviceKey=${params.service_key} -Dcontrast-apiUrl="http://host.docker.internal:28080/Contrast/api" -Dcontrast-orgUuid=${params.orguuid} -Dcontrast-first-name=${BUILD_USER_FIRST_NAME} -Dcontrast-hostname=${BUILD_USER_FIRST_NAME}-server clean  verify
+//                        ### TODO UNCOMMENT TO ENABLE THE BUILD
+//                        ##mvn -P contrast-maven  -Dcontrast-login-username="${BUILD_USER_EMAIL}" -Dcontrast-apiKey=${yaml.api.api_key} -Dcontrast-serviceKey=${params.service_key} -Dcontrast-apiUrl="http://host.docker.internal:28080/Contrast/api" -Dcontrast-orgUuid=${params.orguuid} -Dcontrast-first-name=${BUILD_USER_FIRST_NAME} -Dcontrast-hostname="${BUILD_USER_FIRST_NAME}-server" clean  verify
+//                        """
+                    }
+                }
+            }
+        }
+        stage("QA") {
+            steps {
+                sh 'echo "QA"'
+//              ### TODO INSERT CREDENTIALS script on next line
+                sh 'echo "deploy to QA"'
+//              ### TODO INSERT DEPLOYMENT script on next line
+                sh 'echo "Run QA Tests"'
+//                script {
+//                    withCredentials([file(credentialsId: 'contrast_security-potato-ip', variable: 'path')]) {
+//                        def contents = readFile(env.path)
+//                        writeFile file: 'contrast_security2.yaml', text: "$contents"
+//                    }
+//                }
+            }
+        }
+        stage("UAT") {
+            steps {
+                sh 'echo "deploy to UAT"'
+                sh 'echo "Run Acceptance Tests"'
+            }
+        }
+        stage("PRE-PROD") {
+            steps {
+                sh 'echo "deploy to PRE-PROD"'
+            }
+        }
+        stage("PROD") {
+            steps {
+                sh 'echo "deploy to PROD"'
+                sh 'echo "Re-configure Load Balancers"'
+                sh 'echo "Verify B"'
+                sh 'echo "Drain A"'
+            }
+        }
+        stage("OPERATE") {
+            steps {
+                sh 'echo "Update SIEM"'
+                sh 'echo "Update AppMonitoring"'
+            }
+        }
+    }
+}
