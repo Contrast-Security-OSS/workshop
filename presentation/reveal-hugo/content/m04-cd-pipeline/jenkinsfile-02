@@ -9,6 +9,8 @@ pipeline {
                 sh 'echo "checkout"'
 //                ### TODO INSERT clone operation on next line
                 git branch: '1.5.4-SQLi', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
+//                ### TODO Switch to this branch for a fix
+//                git branch: '1.5.4-SQLi-fixed', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
                 sh 'echo "unit test"'
                 sh '''
                 echo "$PATH"

@@ -37,9 +37,10 @@ You should be ready to explain the pipeline stages Development, Test, and Releas
 Jump to:
 - [Module Introduction](#/module-introduction)
 - [Objectives](#/objectives)
-- [LAB:First-time-build](#/first-run)
-- [LAB:Add code](#/add-code)
-- [LAB:Build code for the first time](#/first-time-build)
+- [LAB:Using Jenkins](#/using-jenkins)
+- [LAB:Adding Contrast Security to your Pipeline](#/add-contrast-to-your-pipeline)
+- [LAB:Adding a build with tests](#/add-build-with-tests)
+- [Final Review](#/final-review)
 - [Conclusion](#/conclusion)
 
 ---
@@ -87,7 +88,8 @@ In this module, we'll avoid some tasks such as:
 A benefit of using a simplified pipeline is we can place focus on tasks centered around Contrast Security.
 
 ---
-### Navigate to Jenkins
+{{< slide id="using-jenkins" >}}
+## LAB: Using Jenkins
 
 Your instructor has configured a username and password on a Jenkins server, plus a working pipeline for this workshop.
 
@@ -127,6 +129,11 @@ Let's review the results of this first run to see the pipeline stages and their 
 [See the full-sized picture](05-jenkins-first-run-results.png)
 
 ---
+{{< slide id="add-contrast-to-your-pipeline" >}}
+## LAB: Adding Contrast Security to your Pipeline
+In this section, we'll add support for using Contrast Security
+
+---
 ### View the configuration
 
 Click into the *Configure* link to examine the organization of the pipeline, and its three main sections
@@ -144,6 +151,10 @@ The details are your User Settings keys to access the Contrast TeamServer via AP
 
 {{< figure src="05-jenkins-configuration-parameters.png" height="300px">}}
 [See the full-sized picture](05-jenkins-configuration-parameters.png)
+
+---
+{{< slide template="info" >}}
+### TODO: Explain why we use the contrast_security.yaml file.
 
 ---
 ### Add your `contrast_security.yaml` credentials parameter
@@ -254,7 +265,8 @@ Navigate into the log files to see the outcomes of the following:
 Next, we'll add a command to build the code and run unit tests, and observe our first failure.
 
 ---
-Enable the first build
+{{< slide id="add-build-with-tests" >}}
+## LAB: Add a Build with Tests
 
 Navigate to your pipeline definition and find the line with this text:
 
@@ -359,36 +371,33 @@ Trace Likelihood: High
 Next, let's look at TeamServer
 
 ---
-### TeamServer Vulnerability #1
+### TeamServer Vulnerability - Hibernate Injection
 
 Next, navigate to TeamServer at https://eval.contrastsecurity.com/Contrast, and then find your vulnerable application.
 
-Work with your instructor to review the contents of the vulnerabilities, messages, and steps to mitigate.
+Your instructor will review the results of the tests and show you vulnerabilities, messages, and steps to mitigate.
 
 `TODO: Show a screenshot of TeamServer and the vulnerability for DEV`
 
 ---
 ### Fix the code for DEV
 
-Let's fix the code for the vulnerability we just found.
+We have a fix already checked into GitHub at this location:
 
-We'll walk through the code change by using a fix already checked into a different branch.
+https://github.com/Contrast-Security-OSS/spring-petclinic/tree/1.5.4-SQLi-fixed
 
-At the command line, run this command
-
-```commandline
-cd %HOMEPATH%
-git checkout <name of the first branch>
-```
-
-`TODO: identify the branch with the code fix`
 
 ---
 ### Examine the DEV code difference
 
-On GitHub, navigate to this page to see the code difference with the changes for this vulnerability.
+On GitHub, navigate to this page to see the code difference with the changes for this vulnerability.  You can see the differences at this link:
 
-`TODO: Include a link to the branch's code difference highlighting the code change`
+https://github.com/Contrast-Security-OSS/spring-petclinic/commit/5930006b7c75c21472c5c4d33ef520ceed689902
+
+The image below shows the remediation as substituting a more modern query instead of the existing query.
+
+{{< figure src="05-github-hibernate-diff.png" style="border: 1px solid #000;" height="300px">}}
+[See the full-sized picture](05-github-hibernate-diff.png)
 
 ---
 ### Reconfigure Jenkins
@@ -397,115 +406,77 @@ On GitHub, navigate to this page to see the code difference with the changes for
 Instructors: Show the users how this is the only change in the branch.
 {{% /note %}}
 
-On the Jenkins server, reconfigure the pipeline to use the new branch named `TODO: The name of the new branch."
+On the Jenkins server, reconfigure the pipeline to use the new branch named `1.5.4-SQLi-fixed`.
 
-`TODO: Add a screenshot showing how to reconfigure the Jenkins Server`
+- Comment out the existing Github clone operation.
+- Uncomment the new GitHub clone operation.
 
----
-{{< slide id="lab-build-and-deploy-2" >}}
-## LAB: Run the pipeline a second time
+Your results should look like the following:
 
-Re-Run the build with the details as shown below:
-
-`TODO: Identify required running parameters`
-
-Let's investigate this second end-to-end pipeline run, which will fail on the TEST stage.
-
----
-{{< slide id="lab-detect-and-remediate-2" >}}
-### Testing - vulnerability #2
-
-We will expose our second vulnerability when we run the pipeline and its automated tests.  In higher environments, DevOps teams reveal issues not always visible in lower environments.  Here, we expose a vulnerability in the QA environment  
-
-The result is a failure in Jenkins.
-
-`TODO: Show a Jenkins screenshot with the build failure`
-
-Let's review this failure on TeamServer
-
----
-### Review Vulnerability #1
-
-Next, navigate to TeamServer at https://eval.contrastsecurity.com/Contrast, and then find your vulnerable application in the DEV Environment.
-
-Your instructor will show you the remediation of the first vulnerability.
-
-`TODO: Show a screenshot of TeamServer and the remediated vulnerability in DEV`
-
-`TODO: Work through a RBAV example.`
-
----
-### TeamServer Vulnerability #2
-
-Navigate to TeamServer at https://eval.contrastsecurity.com/Contrast, and then find your vulnerable application for the QA Environment.
-
-Work with your instructor to review the contents of the vulnerabilities, messages, and steps to mitigate.
-
-`TODO: Show a screenshot of TeamServer and the vulnerability for QA`
-
----
-### Fix the code for TEST
-
-Let's fix the code for the vulnerability we just found.
-
-We'll walk through the code change by using a fix already checked into a different branch.
-
-At the command line, run this command
-
-```commandline
-cd %HOMEPATH%
-git checkout <name of the second branch>
+```groovy
+//                ### TODO INSERT clone operation on next line
+//                git branch: '1.5.4-SQLi', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
+//                ### TODO Switch to this branch for a fix
+                git branch: '1.5.4-SQLi-fixed', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
+                sh 'echo "unit test"'
 ```
 
-`TODO: identify the second branch with the code fix for QA`
+Re-run your jenkins build to see the longer build succeed.
 
 ---
-### Examine the TEST code difference
+{{< slide id="lab-deploy" >}}
+## LAB: Deploy the software application
 
-On GitHub, navigate to this page to see the code difference with the changes for this vulnerability.
-
-`TODO: Include a link to the branch's code difference highlighting the code change`
-
----
-### Reconfigure Jenkins
-
-{{% note %}}
-Instructors: Show the users how this is the only change in the branch.
-{{% /note %}}
-
-On the Jenkins server, reconfigure the pipeline to use the new branch named `TODO: The name of the new branch."
-
-`TODO: Add a screenshot showing how to reconfigure the Jenkins Server`
+- Configure the jenkinsfile to enable terraform. 
 
 ---
-{{< slide id="lab-build-and-deploy-3" >}}
-## LAB: Run the pipeline a third time
-
-Re-Run the build with the details as shown below:
-
-`TODO: Identify required running parameters`
-
-Let's investigate this third end-to-end pipeline run, which will successfully run all the way through the RELEASE stage and deploy software to the PROD environment.
+### Run the build
+- Trigger the build to deploy to QA
 
 ---
-### Review Vulnerability #2
+### Navigate to the application
 
-Next, navigate to TeamServer at https://eval.contrastsecurity.com/Contrast, and then find your vulnerable application in the QA Environment.
-
-Your instructor will show you the remediation of the first vulnerability.
-
-`TODO: Show a screenshot of TeamServer and the remediated vulnerability in DEV`
-
-`TODO: Work through a RBAV example.`
+- Browse to the correct URL
 
 ---
-{{< slide id="lab-observe-protect-attack" >}}
-## Contrast Protect
-
-Given the running application, work through an example of Protect
+### Manually test your software to find a new vulnerability
 
 ---
-### Review the Jenkinsfile
+### Verify on TeamServer there is a new vulnerability
+
+---
+### Identify the software fix
+
+---
+### Switch to a different branch.
+
+*Similar to before.*  On the Jenkins server, reconfigure the pipeline to use the new branch named `TODO: Identify the fix`.
+
+- Comment out the existing Github clone operation.
+- Uncomment the new GitHub clone operation.
+
+Your results should look like the following:
+
+```groovy
+//                ### TODO INSERT clone operation on next line
+//                git branch: '1.5.4-SQLi', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
+//                ### TODO Switch to this branch for a fix
+                git branch: '1.5.4-SQLi-fixed', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
+                sh 'echo "unit test"'
+```
+
+Re-run your jenkins build.
+
+---
+### Test the software with the new fix
+
+
+---
+### Verify the fix
+
+---
+{{< slide id="final-review" >}}
+### Final review of the Jenkinsfile
 
 Study the Jenkinsfile for is content:
 - Overall layout of the pipeline stages
@@ -525,39 +496,3 @@ Your instructor will inform you about how long your environment will remain in o
 Go back to the [module list](../#/module-list)  
 
 ---
-## The Contrast Security workshop project
-
-The `Contrast-Security-OSS/workshop` repository contains the contents of this workshop, plus helper scripts and tools to speed things along.
-  
-We encourage you to browse through this open-source repository to review the contents of the build scripts and source code.  We will not use the code directly, and do not need to check it out.
-
-This repository is available at: https://github.com/Contrast-Security-OSS/spring-petclinic
-
----
-## LAB: Checkout and build
-
-We will start by having you checkout the code locally, and then we'll build on an already running Jenkins Server configured for your build pipeline.
-
----
-### Checking out the code
-
-Let's start by checking out code onto your local workstation, so you can better investigate the content of the files.
-
-Open a command prompt and run this command:
-
-```commandline
-cd %HOMEPATH%
-git clone https://github.com/Contrast-Security-OSS/workshop
-git clone https://github.com/Contrast-Security-OSS/spring-petclinic
-
-```
-
----
-### Review and study the directory structure
-
-Navigate through the folder to observe the characteristics of this project:
-- Build script
-- Maven pom.xml file
-- Source Code
-- Tests
-
