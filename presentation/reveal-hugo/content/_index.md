@@ -93,7 +93,7 @@ The general flow is from top-to-bottom in vertical sections, and left-to-right f
 ---
 ## Key Concepts - Interactive Application Security Testing
 {{% note %}}
-Emphasis is on the instrumentation as an inside-out view of your software application. 
+Emphasis is on the instrumentation as an inside-out view of your software application.
 {{% /note %}}
 
 Interactive Application Security Testing, or IAST, is a modern approach to software security that is favorable to DevOps teams.  In earlier software security models, teams had to run security operations in separate and time-consuming processes not connected to your DevOps pipeline.  IAST, on the other hand, is fast and is well-integrated into your DevOps pipeline with immediate feedback.
@@ -109,19 +109,19 @@ Contrast Assess neither scans nor attacks applications but, instead, uses patent
 As we discussed, Contrast Security is unique in the way how it identifies vulnerabilities. Now let's take a look at some of the benefits of this approach.
 
 ---
-## Highest Accuracy 
+## Highest Accuracy
 
 Instrumentation allows Contrast Security to report the vulnerabilities from the inside of applications which produces highly accurate results without dependence on security experts. In addition, Contrast Security combines the most effective elements of Interactive (IAST), Static (SAST), and Dynamic (DAST) application security testing technology, software composition analysis (SCA), and configuration analysis, delivering them directly into applications. This combination of techniques produces the telemetry necessary to detect vulnerabilities with virtually no false positives and no false negatives.
 
 ---
 ## Scalable Architecture
 
-Contrast Assess scales because it instruments application security into each application, delivering and distributing vulnerability assessment across an entire application portfolio. Every running application continuously produces results in parallel. Contrast differs from legacy approaches that require application security experts – a human element that does not scale. Even with hundreds or thousands of applications, Contrast Assess provides an always up-to-date dashboard for each application with vulnerability, library, architecture, and other security details. 
+Contrast Assess scales because it instruments application security into each application, delivering and distributing vulnerability assessment across an entire application portfolio. Every running application continuously produces results in parallel. Contrast differs from legacy approaches that require application security experts – a human element that does not scale. Even with hundreds or thousands of applications, Contrast Assess provides an always up-to-date dashboard for each application with vulnerability, library, architecture, and other security details.
 
 ---
 ## Contrast is ideal for DevSecOps
 
-Unlike legacy approaches that require time-consuming, late-stage scans that disrupt the development process, there is no separate security testing phase with Contrast Assess. Contrast Assess uses its deep security instrumentation to produce a continuous stream of accurate vulnerability analysis whenever and wherever software is run. Development, QA, DevOps, and security teams get results as they develop and test software, enabling them to find and fix security flaws early in the software lifecycle when they are easiest and cheapest to remediate. 
+Unlike legacy approaches that require time-consuming, late-stage scans that disrupt the development process, there is no separate security testing phase with Contrast Assess. Contrast Assess uses its deep security instrumentation to produce a continuous stream of accurate vulnerability analysis whenever and wherever software is run. Development, QA, DevOps, and security teams get results as they develop and test software, enabling them to find and fix security flaws early in the software lifecycle when they are easiest and cheapest to remediate.
 
 Contrast Security enables DevOps teams to deliver security-as-code by:
 
@@ -146,7 +146,7 @@ Traditional SAST solutions attempt to build a model of an application and pseudo
 ---
 ## Key Concepts - Runtime Application Self-Protection
 
-Runtime Application Self-Protection, or RASP, is protection added to applications in production environments.  RASP is a best practice solution to stop hackers’ attempts to compromise enterprise applications and data. A RASP solution incorporates security into the running application wherever it resides on a server, providing better threat visibility from inside of the running application. Being server-based, RASP security is able to detect, block, and mitigate attacks immediately, protecting applications as they run in real time by analyzing both application behavior and context. 
+Runtime Application Self-Protection, or RASP, is protection added to applications in production environments.  RASP is a best practice solution to stop hackers’ attempts to compromise enterprise applications and data. A RASP solution incorporates security into the running application wherever it resides on a server, providing better threat visibility from inside of the running application. Being server-based, RASP security is able to detect, block, and mitigate attacks immediately, protecting applications as they run in real time by analyzing both application behavior and context.
 
 ---
 {{< slide id="setup-and-prerequisites" >}}
@@ -183,7 +183,7 @@ https://eval.contrastsecurity.com
 
 There are two parts to your credentials:
 
-- Traditional username + password to access the site via the URL listed above. 
+- Traditional username + password to access the site via the URL listed above.
 - As a convenience, we're providing the Java agent configuration file named, `contrast_security.yaml.`
 
 The screens may vary from what we show, as Contrast Security provides regular updates to the SaaS offering.
@@ -200,8 +200,9 @@ You can jump to different modules from here.
 - Module 1: [First Time Contrast Users](m01-fist-time-users)
 - Module 2: [Instrumenting a Container](m02-instrumenting-container)
 - Module 3: [Instrumenting a Java application](m03-instrumenting-java-app)
-<!-- 
+<!--
 - Module 4: [Building a DevOps Pipeline with Contrast](m04-cd-pipeline)
 -->
 - Module 5: [Using the Contrast API](m05-teamserver-api)
+- Module 6: [Introduction to Open Source](m06-intro-to-oss)
 - [Conclusion](m99-conclusion)
