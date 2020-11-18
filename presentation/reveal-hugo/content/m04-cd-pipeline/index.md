@@ -121,9 +121,9 @@ Start by triggering an initial build of your pipeline.  This initial pipeline is
 ---
 ### First run results
 
-Let's review the results of this first run to see the pipeline stages and their intended activities.
+Review the results of this first run to see the pipeline stages and their intended activities.
 - DEV/QA/UAT/PRE-PROD/PROD/OPERATE
-- These stages imitate advanced enterprise pipelines 
+- These stages imitate advanced enterprise pipelines
 
 {{< figure src="05-jenkins-first-run-results.png" height="300px">}}
 [See the full-sized picture](05-jenkins-first-run-results.png)
@@ -131,7 +131,7 @@ Let's review the results of this first run to see the pipeline stages and their 
 ---
 {{< slide id="add-contrast-to-your-pipeline" >}}
 ## LAB: Adding Contrast Security to your Pipeline
-In this section, we'll add support for using Contrast Security
+Next we'll add support for using Contrast Security
 
 ---
 ### View the configuration
@@ -153,13 +153,19 @@ The details are your User Settings keys to access the Contrast TeamServer via AP
 [See the full-sized picture](05-jenkins-configuration-parameters.png)
 
 ---
-{{< slide template="info" >}}
-### TODO: Explain why we use the contrast_security.yaml file.
+{{< slide template="tip" >}}
+### The contrast_security.yaml file.
+
+The file `contrast_security.yaml` contains keys to enable your instrumented application to communicate with the Contrast TeamServer.  You have more than one way to supply keys to your application, including the yaml file, environment variables, or command-line options. 
+
+This workshop imports `contrast_security.yaml` as a secret file into Jenkins for use in a pipeline.  We cover other options in separate workshop modules.
+
+More advanced teams may utilize techniques aligned with local security-minded policies.  This includes parsing the yaml file or using environment variables.  Those techniques are beyond the scope of this workshop. 
 
 ---
 ### Add your `contrast_security.yaml` credentials parameter
 
-Your instructor already added a `contrast_security.yaml` file with your name, which we use below.
+Your instructor added a `contrast_security.yaml` file with your name to the Jenkins instance.  We'll add this credential as a Jenkins Credentials Parameter.
 
 {{< figure src="05-jenkins-configuration-add-parameter.png">}}
 
@@ -176,12 +182,13 @@ The results of your added credential should look similar to the following:
 
 {{< figure src="05-jenkins-configuration-add-credentials-parameter.png">}}
 
-As you can see, the parameter named `contrast_security.yaml` refers to your file, which we'll use in later steps
+As you can see, the parameter named `contrast_security.yaml` refers to your file, which we'll use in later steps.
+
 
 ---
 ### Review Jenkins Pipeline definition
 
-The Pipeline section contains an in-line definition of your pipeline.  In the coming sections, we'll spend most of our time adding code to the pipeline definition to include Contrast Security capabilities.  These sections are marked with comments.
+The Pipeline section contains an in-line definition of your pipeline.  In the coming sections, we'll spend most of our time editing the content to include Contrast Security capabilities.  These sections are marked with comments.
 
 {{< figure src="05-jenkins-configuration-pipeline.png" height="300px">}}
 [See the full-sized picture](05-jenkins-configuration-pipeline.png)
@@ -194,7 +201,7 @@ In your Jenkins Configuration, under the Pipeline section entitled, _Pipeline sc
 ```groovy
 //                ### TODO INSERT clone operation on next line
 ```
-The pipeline points to the source code in a GitHub branch with a known vulnerability.  Uncomment the line that starts with `git branch.`
+The pipeline points to a branch with a known vulnerability.  Uncomment the line that starts with `git branch` for the branch named `1.5.4-SQLi`:
 
 ```groovy
         stage("DEV") {
@@ -233,17 +240,11 @@ Save your changes and trigger the build to verify the results.
 ---
 {{< slide template="tip" >}}
 ### TIP
+Many teams use infrastructure-as-code (IaC) techniques and check-in their pipeline definition into a repository.  On Jenkins, this means capturing the defintion into a Jenkinsfile and storing it on a GitHub repository.  
 
-There is more than one way to acquire the `contrast_security.yaml` file.  We prescribe a simple model given workshop requirements and limitations.
+We will edit a definition stored in Jenkins.  It is common for teams to prototype an in-line defintion and then commit their working changes to a Jenkinsfile.
 
-More advanced teams may utilize techniques aligned with local security-minded policies.  This includes parsing the yaml file or using environment variables.  Those techniques are beyond the scope of this workshop. 
-
----
-{{< slide template="tip" >}}
-### TIP
-Many teams settle on using infrastructure-as-code (IaC) to check-in their pipeline definition into a repository.  On Jenkins, this means capturing the defintion into a Jenkinsfile.  We will edit a pipeline definition maintained in Jenkins instead.  It is common for teams to prototype in-line, and then commit their working changes to a Jenkinsfile.
-
-We will not re-define the Jenkinsfile because it is common for the whole class.
+We are not checking-in a revised Jenkinsfile because it is shared with the entire class.
 
 ---
 ### Run the pipeline to see the build
@@ -382,10 +383,9 @@ Your instructor will review the results of the tests and show you vulnerabilitie
 ---
 ### Fix the code for DEV
 
-We have a fix already checked into GitHub at this location:
+We have a fix already checked into GitHub at branch named `1.5.4-SQLi-fixed`.
 
 https://github.com/Contrast-Security-OSS/spring-petclinic/tree/1.5.4-SQLi-fixed
-
 
 ---
 ### Examine the DEV code difference
@@ -394,7 +394,7 @@ On GitHub, navigate to this page to see the code difference with the changes for
 
 https://github.com/Contrast-Security-OSS/spring-petclinic/commit/5930006b7c75c21472c5c4d33ef520ceed689902
 
-The image below shows the remediation as substituting a more modern query instead of the existing query.
+The image below shows the remediation as substituting a more modern query in place of the existing query.
 
 {{< figure src="05-github-hibernate-diff.png" style="border: 1px solid #000;" height="300px">}}
 [See the full-sized picture](05-github-hibernate-diff.png)
