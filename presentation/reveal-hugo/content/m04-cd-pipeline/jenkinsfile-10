@@ -107,7 +107,7 @@ pipeline {
                 }
             }
         }
-        stage("De-Provision") {
+        stage("UAT") {
             // TODO: UNCOMMENT TO ASK THE USER TO CONTINUE
             input {
                 message "Should we continue?"

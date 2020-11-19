@@ -104,17 +104,17 @@ pipeline {
 //                            error("Aborting the build.")
 //                        }
 //                    }
+                }
             }
         }
-    }
-    stage("De-Provision") {
-        // TODO: UNCOMMENT TO ASK THE USER TO CONTINUE
+        stage("UAT") {
+            // TODO: UNCOMMENT TO ASK THE USER TO CONTINUE
 //            input {
 //                message "Should we continue?"
 //                ok "Yes"
 //            }
-        steps {
-            // TODO: UNCOMMENT TO DELETE TERRAFORM INFRASTRUCTURE
+            steps {
+                // TODO: UNCOMMENT TO DELETE TERRAFORM INFRASTRUCTURE
 //                script {
 //                    withCredentials([azureServicePrincipal('ContrastAzureSponsored')]) {
 //                        try {
@@ -133,26 +133,26 @@ pipeline {
 //                        }
 //                    }
 //                }
+            }
+        }
+        stage("PRE-PROD") {
+            steps {
+                sh 'echo "deploy to PRE-PROD"'
+            }
+        }
+        stage("PROD") {
+            steps {
+                sh 'echo "deploy to PROD"'
+                sh 'echo "Re-configure Load Balancers"'
+                sh 'echo "Verify B"'
+                sh 'echo "Drain A"'
+            }
+        }
+        stage("OPERATE") {
+            steps {
+                sh 'echo "Update SIEM"'
+                sh 'echo "Update AppMonitoring"'
+            }
         }
     }
-    stage("PRE-PROD") {
-        steps {
-            sh 'echo "deploy to PRE-PROD"'
-        }
-    }
-    stage("PROD") {
-        steps {
-            sh 'echo "deploy to PROD"'
-            sh 'echo "Re-configure Load Balancers"'
-            sh 'echo "Verify B"'
-            sh 'echo "Drain A"'
-        }
-    }
-    stage("OPERATE") {
-        steps {
-            sh 'echo "Update SIEM"'
-            sh 'echo "Update AppMonitoring"'
-        }
-    }
-}
 }

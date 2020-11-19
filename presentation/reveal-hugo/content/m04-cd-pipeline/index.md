@@ -37,9 +37,11 @@ You should be ready to explain the pipeline stages Development, Test, and Releas
 Jump to:
 - [Module Introduction](#/module-introduction)
 - [Objectives](#/objectives)
-- [LAB:Using Jenkins](#/using-jenkins)
-- [LAB:Adding Contrast Security to your Pipeline](#/add-contrast-to-your-pipeline)
-- [LAB:Adding a build with tests](#/add-build-with-tests)
+- [LAB: Using Jenkins](#/using-jenkins)
+- [First-run](#/first-run)
+- [LAB: Adding Contrast Security to your Pipeline](#/add-contrast-to-your-pipeline)
+- [LAB: Add a Build with Automated Tests](#/add-build-with-tests)
+- [LAB: Deploy the software application](#/deploy-the-application)
 - [Final Review](#/final-review)
 - [Conclusion](#/conclusion)
 
@@ -77,12 +79,12 @@ Be sure to have completed the [prerequisites](../#/2)
 ---
 {{< slide template="warning" >}}
 # DevOps Pipelines
-Since we use shared resources to perform the same operations, we'll use a simplified pipeline to imitate conventional operations in this workshop.  Modern DevOps teams utilize techniques that are not practical in a workshop environment.
+Since we use shared resources to perform the same operations, we'll use a simplified pipeline to imitate conventional operations in this workshop.  Modern DevOps teams utilize techniques that are not practical in a workshop environment.  
 
-In this module, we'll avoid some tasks such as:
+Here, we'll avoid some tasks such as:
  
 - Checking in code
-- Managing Pull requests
+- Pull Requests
 - Creating tickets
 
 A benefit of using a simplified pipeline is we can place focus on tasks centered around Contrast Security.
@@ -100,7 +102,7 @@ Navigate to the Jenkins URL and log on with the credentials supplied to you by y
 ---
 ### Navigate to your Jenkins folder
 
-Click through the Jenkins configurations to find the folder with your name for this exercise:
+Click through the Jenkins configurations to find the Workshop folder and then the sub-folder with your name for this exercise:
 
 {{< figure src="05-jenkins-myfolder.png" style="border: 1px solid #000;">}}
 
@@ -112,18 +114,24 @@ Click into your project entitled, *spring-petclinic.*
 {{< figure src="05-jenkins-my-spring-petclinic.png" style="border: 1px solid #000;">}}
 
 ---
-{{< slide id="fist-run" >}}
+{{< slide id="first-run" >}}
 ### First run
+{{% note %}}
+This is jenkinsfile-00
+{{% /note %}}
 
 Start by triggering an initial build of your pipeline.  This initial pipeline is a skeleton model of a DevOps pipeline.  
 {{< figure src="05-jenkins-trigger-first-build.png" style="border: 1px solid #000;">}}
+
+Reference: `jenkinsfile-00`
 
 ---
 ### First run results
 
 Review the results of this first run to see the pipeline stages and their intended activities.
 - DEV/QA/UAT/PRE-PROD/PROD/OPERATE
-- These stages imitate advanced enterprise pipelines
+- The intent is to emulate a multi-environment enterprise pipeline
+- We will focus on the first three stages where Contrast Security is used two different ways
 
 {{< figure src="05-jenkins-first-run-results.png" height="300px">}}
 [See the full-sized picture](05-jenkins-first-run-results.png)
@@ -214,7 +222,6 @@ The pipeline points to a branch with a known vulnerability.  Uncomment the line 
 
 ---
 ### Acquire your yaml file
-
 In your Jenkins Configuration, under the Pipeline section entitled, _Pipeline script_, find the line with this text:
 
 ```groovy
@@ -235,7 +242,7 @@ Uncomment the code below the instructions as shown below.
 ```
 
 This script gets the contents of the secret and writes it as a file of the same name.
-Save your changes and trigger the build to verify the results.
+Save your changes.
 
 ---
 {{< slide template="tip" >}}
@@ -248,12 +255,17 @@ We are not checking-in a revised Jenkinsfile because it is shared with the entir
 
 ---
 ### Run the pipeline to see the build
+{{% note %}}
+This is jenkinsfile-01
+{{% /note %}}
 
 We're ready to trigger our build pipeline.  Run the build with the details as shown below:
 
 {{< figure src="05-jenkins-jenkinsfile-01-run.png">}}
 
 Examine the console output for additional details.
+
+Reference: `jenkinsfile-01`
 
 ---
 ### Review the log
@@ -267,7 +279,10 @@ Next, we'll add a command to build the code and run unit tests, and observe our 
 
 ---
 {{< slide id="add-build-with-tests" >}}
-## LAB: Add a Build with Tests
+## LAB: Add a Build with Automated Tests
+{{% note %}}
+This is jenkinsfile-02
+{{% /note %}}
 
 Navigate to your pipeline definition and find the line with this text:
 
@@ -309,7 +324,7 @@ Uncomment the build code so the block looks like this:
                     }
 ```
 
-Save the configuration and Build with Parameters to create a new build. 
+Save the configuration.  Next Build with Parameters to create a new build.
 
 ---
 ### Review your build
@@ -340,13 +355,13 @@ Once the maven echo line looks good, enable the pipeline script to build the pro
 
 Save your definition and run your Jenkins pipeline.
 
+Reference: `jenkinsfile-02`
+
 ---
 {{< slide id="lab-detect-and-remediate-1" >}}
-### Testing - vulnerability #1
+### Hibernate Injection Vulnerability
 
-We will expose our first vulnerability when we run the pipeline and its automated tests.
-
-The result is a failure in Jenkins.
+We expose a vulnerability when we run the pipeline and its automated tests, and the result is a failure in Jenkins.
 
 {{< figure src="05-jenkins-dev-build-failure.png" style="border: 1px solid #000;">}}
 
@@ -369,28 +384,40 @@ Trace Severity: Critical
 Trace Likelihood: High
 ```
 
-Next, let's look at TeamServer
+Let's review on TeamServer
 
 ---
-### TeamServer Vulnerability - Hibernate Injection
+### TeamServer Logon
 
 Next, navigate to TeamServer at https://eval.contrastsecurity.com/Contrast, and then find your vulnerable application.
 
 Your instructor will review the results of the tests and show you vulnerabilities, messages, and steps to mitigate.
 
-`TODO: Show a screenshot of TeamServer and the vulnerability for DEV`
+{{< figure src="05-eval-login.png" style="border: 1px solid #000;" height="300px">}}
+
+---
+### TeamServer Vulnerability - Hibernate Injection
+
+Your instructor will review the contents of the application:
+- Overview
+- Vulnerabilities
+- Hibernate Vulnerability and how to fix
+
+{{< figure src="05-eval-vulnerability-hibernate.png" style="border: 1px solid #000;" height="300px">}}
 
 ---
 ### Fix the code for DEV
 
-We have a fix already checked into GitHub at branch named `1.5.4-SQLi-fixed`.
+We have a fix already checked into GitHub at branch named `1.5.4-SQLi-fixed` at this location on GitHub:
 
 https://github.com/Contrast-Security-OSS/spring-petclinic/tree/1.5.4-SQLi-fixed
+
+Next, we'll review the fix.
 
 ---
 ### Examine the DEV code difference
 
-On GitHub, navigate to this page to see the code difference with the changes for this vulnerability.  You can see the differences at this link:
+On GitHub, navigate to this page to see the code difference with the changes for this vulnerability.  You can see the differences at this link where we commented out the old code and uncommented out new code.
 
 https://github.com/Contrast-Security-OSS/spring-petclinic/commit/5930006b7c75c21472c5c4d33ef520ceed689902
 
@@ -406,7 +433,7 @@ The image below shows the remediation as substituting a more modern query in pla
 Instructors: Show the users how this is the only change in the branch.
 {{% /note %}}
 
-On the Jenkins server, reconfigure the pipeline to use the new branch named `1.5.4-SQLi-fixed`.
+On the Jenkins server, reconfigure the pipeline to use the new branch named `1.5.4-SQLi-fixed` by clicking on the *Configure* link and modifying the *Pipeline* script.
 
 - Comment out the existing Github clone operation.
 - Uncomment the new GitHub clone operation.
@@ -424,55 +451,189 @@ Your results should look like the following:
 Re-run your jenkins build to see the longer build succeed.
 
 ---
+### Successful build results
+
+Navigate to the console output if you wish to see the results of the build succeed.  The console output will have a section similar to the following:
+
+```text
+[INFO] --- contrast-maven-plugin:2.8:verify (verify-with-contrast) @ spring-petclinic ---
+[INFO] Successfully authenticated to TeamServer.
+[INFO] Checking for new vulnerabilities for appVersion [petclinic-20201111200130]
+[INFO] Sending vulnerability request to TeamServer.
+[INFO] No new vulnerabilities were found.
+[INFO] Finished verifying your application.
+```
+
+---
 {{< slide id="lab-deploy" >}}
 ## LAB: Deploy the software application
 
-- Configure the jenkinsfile to enable terraform. 
+Most teams build software and then deploy them to a testing environment for internal testing (UAT, SIT, QA, and others).
+
+Normally, teams will build an instrumented application. In this module, we won't cover the process of instrumenting an application in detail because these modules already cover those topics: 
+
+- [Module 2](m02-instrumenting-container) covers the details of instrumenting a container. 
+- [Module 3](m03-instrumenting-java-app) covers the details of instrumenting a standalone Java application
+
+We use a pre-built container already configured with Contrast.
+We will use terraform to distribute the application as a running container on Azure.  
+
+---
+### Add your initials and region
+
+Your build will benefit from some more tailoring to make it easier to identify.  We'll add two *String Parameters* for your initials and a region.
+
+- Navigate to the subsection at *General->This project is parameterized*
+- Click on the button to *Add Parameter* of type *String Parameter*
+- Name your credential as: `initials` and set the Default Value to your initals
+- Click a second time on the button to *Add Parameter* of type *String Parameter*
+- Name your credential as: `location` and set the Default Value to 'eastus' or what your instructor specifies
+
+{{< figure src="05-terraform-jenkins-add-parameter.png">}}
+
+---
+### String Parameters
+
+Your screen should look like the following:
+
+{{< figure src="05-terraform-jenkins-parameter-results.png" height="300px">}}
+[See the full-sized picture](05-terraform-jenkins-parameter-results.png)
+
+---
+### Enable Terraform commands
+
+In the Jenkins Configuration section for the Pipeline->Script, modify the contents so the follow text is no longer commented in the section for the QA stage:
+
+```groovy
+                // TODO: UNCOMMENT TO CREATE TERRAFORM INFRASTRUCTURE.
+                // TODO: MAKE SURE TO ADD PARAMETERS FOR location AND INITIALS
+                script {
+                    withCredentials([azureServicePrincipal('ContrastAzureSponsored')]) {
+                        try {
+                            sh """
+                            export ARM_CLIENT_ID=$AZURE_CLIENT_ID
+                            export ARM_CLIENT_SECRET=$AZURE_CLIENT_SECRET
+                            export ARM_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID
+                            export ARM_TENANT_ID=$AZURE_TENANT_ID
+                            terraform apply -auto-approve -var 'location=$location' -var 'initials=$initials' -var 'environment=qa' -var 'servername=jenkins-$initials' -var 'session_metadata="version=1.5.1"'
+                            """
+                        } catch (Exception e) {
+                            echo "Terraform refresh failed, deleting state"
+                            sh "rm -rf terraform.tfstate"
+                            currentBuild.result = "FAILURE"
+                            error("Aborting the build.")
+                        }
+                    }
+                }
+            }
+        }
+
+```
+
+---
+### Enable Terraform destroy
+
+In the same Pipeline->Script section, modify the contents of the UAT stage so they are no longer commented:
+
+```groovy
+        stage("UAT") {
+            // TODO: UNCOMMENT TO ASK THE USER TO CONTINUE
+            input {
+                message "Should we continue?"
+                ok "Yes"
+            }
+            steps {
+                // TODO: UNCOMMENT TO DELETE TERRAFORM INFRASTRUCTURE
+                script {
+                    withCredentials([azureServicePrincipal('ContrastAzureSponsored')]) {
+                        try {
+                            sh """
+                            export ARM_CLIENT_ID=$AZURE_CLIENT_ID
+                            export ARM_CLIENT_SECRET=$AZURE_CLIENT_SECRET
+                            export ARM_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID
+                            export ARM_TENANT_ID=$AZURE_TENANT_ID
+                            terraform destroy -auto-approve
+                            """
+                        } catch (Exception e) {
+                            echo "Terraform delete failed, deleting state"
+                            sh "rm -rf terraform.tfstate"
+                            currentBuild.result = "FAILURE"
+                            error("Aborting the build.")
+                        }
+                    }
+                }
+            }
+        }
+
+```
+
+Reference: `jenkinsfile-03`
 
 ---
 ### Run the build
-- Trigger the build to deploy to QA
+
+Run the build with parameters to run through the earlier unit tests, and then deploy the running application as a container.
+
+The build will pause and wait for your approval to continue.  This gives you time to navigate to the running application.
+
+Your URL should contain your initials and region in this format:
+
+`http:spring-petclinic-mm.eastus.azurecontainer.io:8080`
+
+Review your logfile to find the official answer which will look like this: 
+
+```text
+Apply complete! Resources: 2 added, 0 changed, 0 destroyed.
+Outputs:
+
+contrast = This app should appear in the environment http://192.168.86.118:28080/Contrast
+fqdn = http://spring-petclinic-mm.eastus.azurecontainer.io:8080
+ip_address = 52.188.88.228
+
+```
 
 ---
 ### Navigate to the application
 
-- Browse to the correct URL
+Browse to the URL for your application.  The application we deploy is at an earlier version and will have the same Hibernate Injection vulnerability.  This means you can replicate the earlier vulnerability results.
 
 ---
 ### Manually test your software to find a new vulnerability
 
+You can navigate to the application and replicate the same failure and see similar results observed via automated testing.
+
+In more established pipelines, we would take the negative results and fail the pipeline.  
+
+For the purpose of this workshop module, we are omitting this functionality.
+
+Your instructor will walk you through the process of accessing the application and replicating the vulnerability.
+
 ---
-### Verify on TeamServer there is a new vulnerability
+### Testing petclinic
+
+The Petclinic application is a popular open-source java applicaiton many teams use for testing and experimentation.
+
+Navigate to the home page and click on the "Find Owners" section in the upper-right.  
+
+{{< figure src="05-petclinic-homepage.png" height="300px">}}
+[See the full-sized picture](05-petclinic-homepage.png)
+
+---
+### Enter test data
+
+Most teams have some type of standard-input testing where they enter names, numbers, and other data as common use cases.  Here, let's enter the name `Davis" to produce a response with two rows of data.
+
+Most teams also have a separate activity to perform vulnerability testing.  Contrast Security helps reduce the amount of work you need for this activity because we leverage normal usage to find vulnerabilities.  This is quite valuable to teams because it is not easy to test past vulnerabilities with complex payloads.  It is much easier to reveal vulnerabilities with our IAST inside-out approach.  
+
+{{< figure src="05-petclinic-find-owners.png" height="300px">}}
+[See the full-sized picture](05-petclinic-find-owners.png)
 
 ---
 ### Identify the software fix
 
----
-### Switch to a different branch.
+After you enter the name, `Davis,` navigate to TeamServer to observe the Hibernate injection vulnerability from before.
 
-*Similar to before.*  On the Jenkins server, reconfigure the pipeline to use the new branch named `TODO: Identify the fix`.
-
-- Comment out the existing Github clone operation.
-- Uncomment the new GitHub clone operation.
-
-Your results should look like the following:
-
-```groovy
-//                ### TODO INSERT clone operation on next line
-//                git branch: '1.5.4-SQLi', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
-//                ### TODO Switch to this branch for a fix
-                git branch: '1.5.4-SQLi-fixed', url: 'https://github.com/Contrast-Security-OSS/spring-petclinic.git'
-                sh 'echo "unit test"'
-```
-
-Re-run your jenkins build.
-
----
-### Test the software with the new fix
-
-
----
-### Verify the fix
+Your instructor wil walk you through the pages to review the information as before.
 
 ---
 {{< slide id="final-review" >}}
