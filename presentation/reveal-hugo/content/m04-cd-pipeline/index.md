@@ -655,5 +655,3 @@ This concludes the module.
 Your instructor will inform you about how long your environment will remain in operation and if you will be covering other modules.
 
 Go back to the [module list](../#/module-list)  
-
----
