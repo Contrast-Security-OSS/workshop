@@ -200,9 +200,7 @@ You can jump to different modules from here.
 - Module 1: [First Time Contrast Users](m01-fist-time-users)
 - Module 2: [Instrumenting a Container](m02-instrumenting-container)
 - Module 3: [Instrumenting a Java application](m03-instrumenting-java-app)
-<!--
 - Module 4: [Building a DevOps Pipeline with Contrast](m04-cd-pipeline)
--->
 - Module 5: [Using the Contrast API](m05-teamserver-api)
 - Module 6: [Introduction to Open Source](m06-intro-to-oss)
 - [Conclusion](m99-conclusion)
