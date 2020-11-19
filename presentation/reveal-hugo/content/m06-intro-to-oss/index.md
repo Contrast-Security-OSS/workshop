@@ -7,7 +7,7 @@ layout = "bundle"
 draft = false
 
 [logo]
-src = "../images/contrast-security-logo.png"
+src = "../images/contrast-security-gray-logo.png"
 alt = "Contrast Security"
 [reveal_hugo.templates.note]
 background = "#32a852"
@@ -48,6 +48,7 @@ In this module you will learn what is Open Source, what are the common business 
 `Disclaimer: I am not a lawyer and no information in this module is a legal advice`
 
 ---
+{{< slide template="info" >}}
 # Time and Prerequisites
 This Module should take about 40 minutes to complete.
 
