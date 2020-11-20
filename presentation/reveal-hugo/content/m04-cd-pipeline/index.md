@@ -7,7 +7,7 @@ layout = "bundle"
 draft = false
 
 [logo]
-src = "../images/contrast-security-gray-logo.png"
+src = "../images/contrast.png"
 alt = "Contrast Security"
 [reveal_hugo.templates.note]
 background = "#32a852"
@@ -123,7 +123,7 @@ This is jenkinsfile-00
 Start by triggering an initial build of your pipeline.  This initial pipeline is a skeleton model of a DevOps pipeline.  
 {{< figure src="05-jenkins-trigger-first-build.png" style="border: 1px solid #000;">}}
 
-Reference: `jenkinsfile-00`
+Reference: [`jenkinsfile-00`](https://github.com/Contrast-Security-OSS/workshop/blob/master/presentation/reveal-hugo/content/m04-cd-pipeline/jenkinsfile-00)
 
 ---
 ### First run results
@@ -265,7 +265,7 @@ We're ready to trigger our build pipeline.  Run the build with the details as sh
 
 Examine the console output for additional details.
 
-Reference: `jenkinsfile-01`
+Reference: [`jenkinsfile-01`](https://github.com/Contrast-Security-OSS/workshop/blob/master/presentation/reveal-hugo/content/m04-cd-pipeline/jenkinsfile-01)
 
 ---
 ### Review the log
@@ -355,7 +355,7 @@ Once the maven echo line looks good, enable the pipeline script to build the pro
 
 Save your definition and run your Jenkins pipeline.
 
-Reference: `jenkinsfile-02`
+Reference: [`jenkinsfile-02`](https://github.com/Contrast-Security-OSS/workshop/blob/master/presentation/reveal-hugo/content/m04-cd-pipeline/jenkinsfile-02)
 
 ---
 {{< slide id="lab-detect-and-remediate-1" >}}
@@ -567,7 +567,7 @@ In the same Pipeline->Script section, modify the contents of the UAT stage so th
 
 ```
 
-Reference: `jenkinsfile-03`
+Reference: [`jenkinsfile-03`](https://github.com/Contrast-Security-OSS/workshop/blob/master/presentation/reveal-hugo/content/m04-cd-pipeline/jenkinsfile-03)
 
 ---
 ### Run the build
@@ -633,7 +633,7 @@ Most teams also have a separate activity to perform vulnerability testing.  Cont
 
 After you enter the name, `Davis,` navigate to TeamServer to observe the Hibernate injection vulnerability from before.
 
-Your instructor wil walk you through the pages to review the information as before.
+Your instructor will walk you through the pages to review the information as before.
 
 ---
 {{< slide id="final-review" >}}

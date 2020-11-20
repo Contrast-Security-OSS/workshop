@@ -7,7 +7,7 @@ layout = "slidelist"
 outputs = ["Reveal"]
 
 [logo]
-src = "images/contrast-security-gray-logo.png"
+src = "../images/contrast.png"
 alt = "Contrast Security"
 [reveal_hugo.templates.note]
 background = "#32a852"
@@ -203,4 +203,3 @@ You can jump to different modules from here.
 - Module 4: [Building a DevOps Pipeline with Contrast](m04-cd-pipeline)
 - Module 5: [Using the Contrast API](m05-teamserver-api)
 - Module 6: [Introduction to Open Source](m06-intro-to-oss)
-- [Conclusion](m99-conclusion)

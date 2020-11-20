@@ -8,7 +8,7 @@ layout = "bundle"
 draft = false
 
 [logo]
-src = "../images/contrast-security-logo.png"
+src = "../images/contrast.png"
 alt = "Contrast Security"
 [reveal_hugo.templates.note]
 background = "#32a852"
