@@ -2,3 +2,7 @@
 	path = presentation/reveal-hugo/public
 	url = https://github.com/Contrast-Security-OSS/workshop-hugo
 	branch = master
+[submodule "public"]
+	path = public
+	url = https://github.com/Contrast-Security-OSS/workshop-hugo
+	branch = master

@@ -43,7 +43,7 @@ Jump to:
 {{< slide id="module-introduction" >}}
 ## Module Introduction
 
-In this module you will learn what is Open Source, what are the common business risks associated with Open Source and how you can solve those with business risks.
+In this module you will learn what is Open Source, what are the common business risks associated with Open Source and how you can solve those business risks.
 
 `Disclaimer: I am not a lawyer and no information in this module is a legal advice`
 
@@ -70,13 +70,13 @@ Contrast Security is providing this module as a high level overview of some of t
 
 The term Open Source refers to anything that people can modify and share because it’s design is publicly available.
 
-The Open-Source Software or OSS (also sometimes referred to as Free and Open-Source Software or FOSS) refers to any software with source code that anyone can inspect, modify and enhance.
+Open Source Software or OSS (also sometimes referred to as Free and Open Source Software or FOSS) refers to any software with source code that anyone can inspect, modify and enhance.
 
-An integral part of Open Source Software is presence of a license.
+An integral part of Open Source Software is the presence of a license.
 
-Without a license a piece of source code is not an Open Source Software, in fact it can be anything e.g. stolen commercial code. In fact physical source code in public access does not make it Open Source.
+Without a license, a piece of source code is not considered Open Source Software, in fact it can be anything; e.g., stolen commercial code. In fact physical source code in public access does not make it Open Source.
 
-Typically an Open Source License declares that source code in question is available to others who would like to view that code, copy it, learn from it, alter it, or share it.
+Typically an Open Source License declares that the source code in question is available to others who would like to view that code, copy it, learn from it, alter it, or share it.
 
 
 See more: https://opensource.com/resources/what-open-source
@@ -103,25 +103,25 @@ Contrast Security OSS product can help you manage all of these risks.
 
 {{% /note %}}
 
-First thing you need is an instrumented application. You can take any application you have used in previous modules or onboard a new one, e.g. https://github.com/terracotta-bank/terracotta-bank
+First thing you need is an instrumented application. You can take any application you have used in previous modules or onboard a new one, e.g. https://github.com/terracotta-bank/terracotta-bank.
 
-Once application is on-boarded the list of libraries in such application is populated immediately and you can go to `Applications > [App Name] > Libraries`
+Once an application is onboarded, the list of libraries in the application is populated immediately and you can browse to `Applications > [App Name] > Libraries`
 
 {{< figure src="libraries-tab.png" height="400px">}}
 
 
 ---
 ### Contrast OSS panel overvew
-On the screen shot on previous slide you can find information about the library score (from A to F, where A is best and F is worst) library name, version you are using now (with release date), latest version (also with release date) and class usage information.
+On the screen shot below, you can find information about the library score (from A to F, where A is best and F is worst), library name, version you are using now (with release date), latest version (also with release date), and class usage information.
 
-Contrast scores libraries based three factors: time, status, security
+Contrast scores libraries based three factors: time, status, security. You can read more on library scoring here: https://docs.contrastsecurity.com/en/library-scoring-guide.html.  The Libraries view allows you to quickly identify which OSS libraries may present some risk or vulnerabilities within your application.
 
-You can read more on library scoring here: https://docs.contrastsecurity.com/en/library-scoring-guide.html
+{{< figure src="libraries-tab.png" height="400px">}}
 
 ---
 ### How to find information about publicly known security vulnerabilities in OSS you use?
 
-First click on the funnel next to the "Usage" column title and tick against "Used"
+First click on the funnel next to the "Usage" column title and enable/tick against "Used" checkbox
 {{< figure src="filter-used.png" height="150px">}}
 
 Then click on vulnerabilities drop down list which is on the left
@@ -132,7 +132,7 @@ and choose "Vulnerable", this will produce the list of libraries that contain pu
 
 ---
 ### Detailed security information about the library
-If you click on the library name you will get to a library page where you can find information on which applications are using this library, on which servers those applications are hosted, various other metadata and most importantly information about publicly known security vulnerabilities:
+If you click on the library name, you will get to a library page where you can find information on which applications are using this library, on which servers those applications are hosted, various other metadata, and most importantly, information about publicly known security vulnerabilities:
 
 {{< figure src="detailed-library-info.png" height="450px">}}
 
@@ -140,9 +140,9 @@ If you click on the library name you will get to a library page where you can fi
 {{< slide id="oss-legal-ops-risks" >}}
 ### How to identify OSS legal risks with Contrast?
 
-In very broad terms legal risk originates from those license obligations which are unknown to your business and prevent from licensing your code with terms that satisfy your business model.
+In very broad terms, legal risk originates from those license obligations which are unknown to your business and prevent you from licensing your code with terms that satisfy your business model.
 
-In order to see what licenses were identified in our application click filter icon on the top and expand the list of licenses that are necessary
+In order to see what licenses were identified in your application, click the filter icon on the top and expand the list of licenses as necessary.
 
 {{< figure src="licenses.png" height="350px"
 caption="[See the full-sized picture](licenses.png)">}}
@@ -152,23 +152,23 @@ You can see what you can, can not and must do for every OSS license here: https:
 ---
 ###  How to identify OSS operational risks with Contrast?
 
-On the main "Library" tab release dates will help you quickly understand which libraries are out of date.
+On the main "Libraries" tab, release dates will help you quickly understand which libraries are out of date and should be updated to mitigate risk.
 
-Aside from this: on the top right corner of the Library tab clock "Show Library Status"
+In addition to this, on the top right corner of the Library tab, click "Show Library Status"
 {{< figure src="show-library-status.png" height="94px">}}
 
-You will find graph similar to the one below depicting the age of the libraries that have been identified
+You will then see a graph similar to the one below depicting the age of the libraries that have been identified and how many are out-of-date.
 {{< figure src="operational-status.png" height="400px">}}
 
 ---
 {{< slide id="advanced-features" >}}
 ## Advanced features of Contrast OSS product
 
-Contrast provides you with information about the number of classes loaded during execution of our application as well as list of loaded class names.
+Contrast provides you with information about the number of classes loaded during the execution of your application, as well as, a list of loaded class names.
 
-This information will help developers prioritise the remediation work (e.g. it makes sense to focus on the most used library with largest number of vulnerabilities) or for example estimate the coverage of their applications.
+This information will help developers prioritize their remediation work (e.g. it makes sense to focus on the most used libraries with the largest number of vulnerabilities) or for example estimate the coverage of their applications.
 
-To bring enhanced class usage data simply click on the number in "Usage" column and you will be presented with the following view
+To view enhanced class usage data, simply click on the number under the "Usage" column and you will be presented with the following view:
 {{< figure src="ecu-list.png" height="300px">}}
 
 Go back to the [module list](../#/module-list)  
