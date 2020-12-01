@@ -29,7 +29,7 @@ transition = "zoom"
 {{% note %}}
 
 {{% /note %}}
-# Module 6: Introduction to Open Souce
+# Module 6: Introduction to Open Source
 
 Jump to:
 - [Module Introduction](#/module-introduction)
