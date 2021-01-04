@@ -1,8 +1,0 @@
-api:
-  url: http://URL-for-user2:2
-  api_key: API_KEY_INVALID_STUB2
-  service_key: SERVICE_KEY_INVALID_STUB2
-  user_name: USERNAME_INVALID_STUB2
-agent:
-  logger:
-    level: ALL
