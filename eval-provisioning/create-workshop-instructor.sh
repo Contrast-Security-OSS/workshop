@@ -116,7 +116,7 @@ do
     if [[ "$first" != "first" ]]
     then
         json="{
-            \"name\": \"$ORGANIZATION_NAME workshop\",
+            \"name\": \"$ORGANIZATION_NAME\",
             \"use_existing_user\": false,
             \"adminEmail\": \"$email\",
             \"adminFirstName\": \"$first\",
