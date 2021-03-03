@@ -86,7 +86,7 @@ then
 fi
 
 #List the users we are going to create
-IFS=','
+IFS=', *'
 [ ! -f $INPUT_FILE ] && { echo "$INPUT_FILE file not found"; exit; }
 while read first last email
 do
